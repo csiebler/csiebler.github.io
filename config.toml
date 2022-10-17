@@ -1,4 +1,4 @@
-baseURL = "https://www.clemenssiebler.com"
+baseURL = "https://csiebler.github.io"
 languageCode = "en-us"
 title = "Clemens Siebler's blog about Cloud & AI"
 theme = "paper"
