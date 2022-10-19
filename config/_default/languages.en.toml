@@ -6,7 +6,7 @@ weight = 1
 rtl = false
 
 title = "Clemens Siebler's Blog"
-# logo = "img/logo.jpg"
+# logo = "images/clemens.jpeg"
 # description = "My awesome website"
 # copyright = "Copy, _right?_ :thinking_face:"
 
@@ -14,7 +14,7 @@ dateFormat = "2 January 2006"
 
 [author]
   name = "Clemens Siebler"
-  # image = "img/author.jpg"
+  image = "images/clemens.jpeg"
   # headline = "I'm only human"
   # bio = "A little bit about you"
   links = [
