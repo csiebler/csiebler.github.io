@@ -1,6 +1,6 @@
 ---
 title: "Using Cognitive Services Read API with data secured by VNET"
-date: 2022-22-02T19:30:53+02:00
+date: 2022-02-22
 ---
 
 This post discusses how Cognitive Services can be used to process data that is securely stored behind a VNET. This allows to improve security further when processing sensitive data that is stored in Storage Accounts. In this post, we’ll look into using Read API (from the Azure Computer Vision API) to analyze documents that are heavily protected using networking rules.

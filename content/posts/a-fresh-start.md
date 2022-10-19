@@ -1,6 +1,6 @@
 ---
 title: "A Fresh Start"
-date: 2022-10-16T21:23:25+02:00
+date: 2022-10-16
 ---
 Hello world,
 
