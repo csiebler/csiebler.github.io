@@ -2,6 +2,8 @@
 title: "Mounting Datasets to a Compute Instance in Azure Machine Learning"
 date: 2020-12-07
 ---
+## Introduction
+
 This post outlines how you can mount a Dataset to a Compute Instance in Azure Machine. This can help exploring file-based datasets in Jupyter, especially for large datasets where download to the disk of the Compute Instance is impractical. Furthermore, this method can also help during exploration phase, where you probably want to read only a subset of the data.
 
 ## Prerequisites

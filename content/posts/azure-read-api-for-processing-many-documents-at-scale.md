@@ -1,7 +1,9 @@
 ---
 title: "Using Azure Read API for processing many documents at scale"
-date: 2021-11-11
+date: 2021-11-17
 ---
+## Introduction
+
 The Azure Read API allows you to perform OCR on scanned documents of all kinds. This is great for digitalizing contracts, books, or research documents. With support for features like [natural reading order](https://web.archive.org/web/20220123161532/https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/vision-api-how-to-topics/call-read-api#natural-reading-order-output-latin-languages-only) support, it can be used for a wide range of tasks.
 
 However, how we can use Azure Read API for processing many documents at scale? Let’s say we need to run 100000 documents through Read API. What is the quickest way that we can do it? What image resolution should we use? What are the tradeoffs we need to consider?
@@ -14,12 +16,12 @@ In this post, we’ll look at all these questions and discuss how things like im
 
 Let’s first evaluate if the image resolution makes a difference in terms of processing time and accuracy. For comparing recognition results, we will use the [Levenshtein distance](https://web.archive.org/web/20220123161532/https://en.wikipedia.org/wiki/Levenshtein_distance) to measure the distance between the ground truth of the document and the Read API results.
 
-Image resolution	Image size	Processing time	Levenshtein distance	
-500×667	100KB	1.2s	11	
-1000×1333	300KB	1.5s	6	
-2000×2667	1.3MB	1.7s	3	
-3000×4000	3.1MB	1.9s	0	
-Image resolution test results
+| Image resolution | Image size | Processing time | Levenshtein distance |
+|------------------|------------|-----------------|----------------------|
+| 500×667          | 100KB      | 1.2s            | 11                   |
+| 1000×1333        | 300KB      | 1.5s            | 6                    |
+| 2000×2667        | 1.3MB      | 1.7s            | 3                    |
+| 3000×4000        | 3.1MB      | 1.9s            | 0                    |
 
 A few things come to mind when looking at these numbers:
 
