@@ -16,13 +16,13 @@ In Azure, many users protect their data using a set of security perimeters. Whil
 * Networking layer – from where is the identity allowed to access the data (from the internet, from a range of IP addresses, only from within a VNET, from “nowhere”)
 For example, your Networking settings on your Storage Account might look like this:
 
-![Storage Account](/images/storage_account.png "Typical Networking settings on a Storage Account")
+![Typical Networking settings on a Storage Account](/images/storage_account.png "Typical Networking settings on a Storage Account")
 
 In this case, the data can only be access, when the access request originates from within subnet default inside the VNET `vnet-test`.
 
 Using these security measurements makes it incredibly hard/potentially impossible to have an attacker access the data. But this also creates a problem: what if an Azure service, like for example a Cognitive Service needs to access this data? The service might be authenticated (e.g., using a SAS URL), but from a networking perspective, the service is obviously not coming from within your VNET:
 
-![No storage account access allowed](/images/vnet_storage_access_denied.png)
+![Read API can't access the storage](/images/vnet_storage_access_denied.png "Read API can't access the storage")
 
 In the drawing above the Read API is:
 
@@ -31,7 +31,7 @@ In the drawing above the Read API is:
 
 If we would remove the networking rule on the storage account, the data access would obviously be allowed:
 
-![Storage account access allowed](/images/no_vnet_storage_access_allowed.png)
+![Read API can access the storage](/images/no_vnet_storage_access_allowed.png "Read API can access the storage")
 
 However, this is obviously not the desired setup as the Storage Account might hold sensitive data.
 
@@ -57,7 +57,7 @@ However, the networking layer will still block the request and this is where **R
 
 Putting both together, we get to this:
 
-![Read API can access the storage account using its Managed Identity](/images/vnet_storage_access_allowed.png)
+![Read API can access the storage account using its Managed Identity](/images/vnet_storage_access_allowed.png "Read API can access the storage account using its Managed Identity")
 
 In this case:
 
@@ -68,17 +68,17 @@ In this case:
 
 To try this out, first create a new Computer Vision API (this includes the Read API):
 
-![Create a new Computer Vision API](/images/aad_computer_vision_create.png)
+![Create a new Computer Vision API](/images/aad_computer_vision_create.png "Create a new Computer Vision API")
 
 During the creation, make sure to enable **Managed Identity**. You can also always later enable it under the **Identity** tab:
 
-![Managed Identity on Computer Vision API](/images/computer_vision_managed_identity.png)
+![Managed Identity on Computer Vision API](/images/computer_vision_managed_identity.png "Managed Identity on Computer Vision API")
 
 Next, click **Azure Role Assignments** on the same screen and select **Add role assignment**. Then, assign the **Storage Blob Data Reader** role to your **Storage Account**. Once done, you could send plain storage URLS without SAS tokens to Read API and it could read the data.
 
 Next, navigate to your Storage Account, select **Networking** and check the network settings. In our example here, we only allow access from **selected networks**. Ironically, we did not select any VNET, so the data can’t be accessed from anywhere, including Cognitive Services. However, we’ll add the **Cognitive Services Resource type** and then name of our **Cognitive Service instance**. This means our Cognitive Service can tunnel through this super-restrictive networking setting!
 
-![Allowing our Cognitive Service resource to tunnel through the firewall](/images/networking_settings_storage.png)
+![Allowing our Cognitive Service resource to tunnel through the firewall](/images/networking_settings_storage.png "Allowing our Cognitive Service resource to tunnel through the firewall")
 
 Don't forget to hit the save button.
 
