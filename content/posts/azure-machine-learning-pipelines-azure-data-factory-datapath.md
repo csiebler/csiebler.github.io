@@ -2,11 +2,13 @@
 title: "Invoking Azure Machine Learning Pipelines from Azure Data Factory using DataPath"
 date: 2021-07-23
 ---
+## Introduction
+
 This is a quick post for showing how to call Azure Machine Learning Pipelines from Azure Data Factory. This includes passing data dynamically into the Machine Learning Pipeline using `DataPath`.
 
-##Pipeline Creation
+## Pipeline Creation
 
-First, let’s create an AzureML Pipeline that we can use for this example. Please note that this code is syntactically correct, but probably won’t run unless you adapt a few parameters, e.g., change the environment, adapt the data path, add a training script, etc.
+First, let's create an AzureML Pipeline that we can use for this example. Please note that this code is syntactically correct, but probably won't run unless you adapt a few parameters, e.g., change the environment, adapt the data path, add a training script, etc.
 
 ```python
 import os
@@ -65,11 +67,11 @@ except Exception:
                                                 description="New Training Pipeline Endpoint")
 ```
 
-Most notably, we publish the pipeline as a `PublishedPipeline` and then add it to a `PipelineEndpoint`. A `PipelineEndpoint` acts as a "router" for multiple `PublishedPipelines`, and presents a static URL to its callers. As we re-run this code, it’ll just add our new pipeline behind the current endpoint and sets it as the new default.
+Most notably, we publish the pipeline as a `PublishedPipeline` and then add it to a `PipelineEndpoint`. A `PipelineEndpoint` acts as a "router" for multiple `PublishedPipelines`, and presents a static URL to its callers. As we re-run this code, it'll just add our new pipeline behind the current endpoint and sets it as the new default.
 
 Furthermore, we are using `DataPath` and `PipelineParameter` to make the data input dynamic. `DataPath` allows us to specify an arbitrary path on a datastore as an input, and `PipelineParameter` allows to dynamically pass in the DataPath when invoking the pipeline.
 
-In the next step, we’ll call the `PipelineEndpoint` from Azure Data Factory.
+In the next step, we'll call the `PipelineEndpoint` from Azure Data Factory.
 
 ## Setup in Data Factory
 

@@ -6,15 +6,15 @@ date: 2021-09-21
 
 ## Introduction
 
-Azure offers a rich set of pre-trained AI models called [Cognitive Services](https://web.archive.org/web/20220123154734/https://azure.microsoft.com/en-us/services/cognitive-services/) which can help you solving a large variety of tasks. For example, services like OCR (Optical Character Recognition), form recognition or Speech-to-Text enable you to automate otherwise labor-intensive business processes.
+Azure offers a rich set of pre-trained AI models called [Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/) which can help you solving a large variety of tasks. For example, services like OCR (Optical Character Recognition), form recognition or Speech-to-Text enable you to automate otherwise labor-intensive business processes.
 
-Let's take invoice processing as an example. Historically, this has been performed manually and the turnaround time was probably a few hours or even a few days. It was highly asynchronous and it was "clear" that you had to wait. As we start automating this use case using e.g., [Azure Form Recognizer](https://web.archive.org/web/20220123154734/https://azure.microsoft.com/en-us/services/form-recognizer/), we can make this process not only significantly faster, but we can make it real-time (synchronous). But what does real-time really mean? 1 second? 5 seconds? 1 minute?
+Let's take invoice processing as an example. Historically, this has been performed manually and the turnaround time was probably a few hours or even a few days. It was highly asynchronous and it was "clear" that you had to wait. As we start automating this use case using e.g., [Azure Form Recognizer](https://azure.microsoft.com/en-us/services/form-recognizer/), we can make this process not only significantly faster, but we can make it real-time (synchronous). But what does real-time really mean? 1 second? 5 seconds? 1 minute?
 
 If the user is e.g., uploading a document in an app, how long can we have the user wait for the processing? I personally believe it should be either really fast (less than a few seconds), or it should be asynchronous. So if we want to make it fast, how fast can we make it? Cloud hosted APIs might show larger variance in terms of processing times, so does it make sense to self-host if supported? This could potentially give faster and more predictable response times. Let's find out if this is really the case!
 
 ## Service vs. Self-hosted
 
-For figuring out if it really makes sense to self-host one of the Cognitive Services, we will take the Read, Form Recognizer Invoice and Speech-to-Text APIs as examples. These API are often used for automating a large variety of business processes, such as OCR, invoice processing or call center transcription. All APIs can be consumed as a service in Azure (hosted by Microsoft) or [self-hosted as a Docker container](https://web.archive.org/web/20220123154734/https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-container-support) (user is responsible for hosting it). So, which one is faster?
+For figuring out if it really makes sense to self-host one of the Cognitive Services, we will take the Read, Form Recognizer Invoice and Speech-to-Text APIs as examples. These API are often used for automating a large variety of business processes, such as OCR, invoice processing or call center transcription. All APIs can be consumed as a service in Azure (hosted by Microsoft) or [self-hosted as a Docker container](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-container-support) (user is responsible for hosting it). So, which one is faster?
 
 ## Test Results
 
@@ -66,7 +66,7 @@ Most notably, the container-hosted version is around 2x slower than the Azure ho
 
 ## Speech-to-Text Batch Transcription API
 
-For Speech-to-Text Batch Transcription, we've tested with a single [Speech-to-Text container](https://web.archive.org/web/20220123154734/https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-container-configuration?tabs=stt) running with various settings. To enable batch transcription, we ran it alongside with the [batch transcription container](https://web.archive.org/web/20220123154734/https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-container-batch-processing?tabs=oneshot) in daemon mode on a `F16sv2`. We compared this with the average processing time of the hosted [batch transcription service](https://web.archive.org/web/20220123154734/https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/batch-transcription) in Azure.
+For Speech-to-Text Batch Transcription, we've tested with a single [Speech-to-Text container](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-container-configuration?tabs=stt) running with various settings. To enable batch transcription, we ran it alongside with the [batch transcription container](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-container-batch-processing?tabs=oneshot) in daemon mode on a `F16sv2`. We compared this with the average processing time of the hosted [batch transcription service](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/batch-transcription) in Azure.
 
 | Hosting Type | Azure hosted | Container hosted (4 cores, 4GB of memory) | Container hosted (8 cores, 8GB of memory) |
 |---|---|---|---|
@@ -78,7 +78,7 @@ Since the performance looked pretty comparable during my testing, I choose not t
 * increase container resources to get a x-fold real-time speed for transcription
 * (or a combination of both)
 
-In this case, doubling the resources sped up the transcription by +50%. In this case, it would be more economical [to scale out to multiple containers](https://web.archive.org/web/20220123154734/https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-container-howto-on-premises). Again, unless you need to rely on a self-hosted container for data privacy reasons (e.g., transcribing audio containing PII data), there is little value of using the self-hosted version.
+In this case, doubling the resources sped up the transcription by +50%. In this case, it would be more economical [to scale out to multiple containers](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-container-howto-on-premises). Again, unless you need to rely on a self-hosted container for data privacy reasons (e.g., transcribing audio containing PII data), there is little value of using the self-hosted version.
 
 ## Summary
 

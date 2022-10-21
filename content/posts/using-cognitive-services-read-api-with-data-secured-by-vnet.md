@@ -14,7 +14,7 @@ In Azure, many users protect their data using a set of security perimeters. Whil
 
 * Authentication layer – requirement to authenticate at the storage layer, e.g., via a access key or based on an identity (could be a real user or a system managed identity)
 * Authorization layer – what is the identity allowed to do with the data (just read certain folders, write data, delete, etc.)
-* Networking layer – from where is the identity allowed to access the data (from the internet, from a range of IP addresses, only from within a VNET, from “nowhere”)
+* Networking layer – from where is the identity allowed to access the data (from the internet, from a range of IP addresses, only from within a VNET, from "nowhere")
 For example, your Networking settings on your Storage Account might look like this:
 
 ![Typical Networking settings on a Storage Account](/images/storage_account.png "Typical Networking settings on a Storage Account")
@@ -48,11 +48,11 @@ The solution to make this scenario work requires two components:
 
 ### Managed Identities
 
-Most Azure services can "assume" a **Managed Identity**. A Managed Identity is a system user that is tied to that specific Azure resource. Since it is a “user”, the identity lives in your Azure Active Directory. That means we can assign that identity other privileges, such as access to storage or other Azure services. This means we can firstly assign our Cognitive Service a Managed Identity. Secondly, we can allow that identity to be able to read/write to our storage account using IAM. As a result, the Cognitive Service can access data without the need for access keys. Instead, it automatically requests an OAuth token from AAD and uses it to authenticate to the storage.
+Most Azure services can "assume" a **Managed Identity**. A Managed Identity is a system user that is tied to that specific Azure resource. Since it is a "user", the identity lives in your Azure Active Directory. That means we can assign that identity other privileges, such as access to storage or other Azure services. This means we can firstly assign our Cognitive Service a Managed Identity. Secondly, we can allow that identity to be able to read/write to our storage account using IAM. As a result, the Cognitive Service can access data without the need for access keys. Instead, it automatically requests an OAuth token from AAD and uses it to authenticate to the storage.
 
 ### Resource Service Instances
 
-However, the networking layer will still block the request and this is where **Resource Service Instances** come into play. With this feature we can specify a list of Azure services that are allowed to connect to the storage account regardless of its networking settings. This means, we can explicitly permit our Cognitive Service resource to “tunnel through” the firewall. Is this a security issue? No, because it is only allowed for the identity of the Cognitive Service itself. And as this identity is a system user, it is automatically secured.
+However, the networking layer will still block the request and this is where **Resource Service Instances** come into play. With this feature we can specify a list of Azure services that are allowed to connect to the storage account regardless of its networking settings. This means, we can explicitly permit our Cognitive Service resource to "tunnel through" the firewall. Is this a security issue? No, because it is only allowed for the identity of the Cognitive Service itself. And as this identity is a system user, it is automatically secured.
 
 ### Overall Architecture
 

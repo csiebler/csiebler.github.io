@@ -6,7 +6,7 @@ date: 2021-07-19
 
 This post is a quick tip, showing how you can automatically enforce an Init Script during Azure Machine Learning Compute Instance provisioning. This ensures that even when the user did not specify a script, a default script is always being executed.
 
-For more details on the init script capabilities, have a look at the [documentation](https://web.archive.org/web/20220123155113/https://docs.microsoft.com/en-us/azure/machine-learning/how-to-create-manage-compute-instance?tabs=python#setup-script).
+For more details on the init script capabilities, have a look at the [documentation](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-create-manage-compute-instance?tabs=python#setup-script).
 
 ## Instructions
 
