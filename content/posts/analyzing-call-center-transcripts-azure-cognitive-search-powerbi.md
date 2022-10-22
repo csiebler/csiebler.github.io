@@ -18,11 +18,11 @@ Before we get started, all json documents and data samples can be found in this 
 
 ### Data pre-processing
 
-Let"s first look at a short data sample that we"ll use for this tutorial:
+Let's first look at a short data sample that we'll use for this tutorial:
 
 ![Data sample from our transcripts](/images/transcripts_sample.png "Data sample from our transcripts")
 
-As you can see, our input data follows a quite simple schema. However, in reality you might want to use transcripts from the [Azure Speech-to-Text Batch Transcription API](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/batch-transcription). However, since these transcripts are very detailed and verbose, I"d recommend to reduce them down a bit first. For example, you can run this basic scripts against a few of your sample documents: [cognitive-search-call-transcripts/preprocess.py](https://github.com/csiebler/cognitive-search-call-transcripts/blob/main/preprocess.py). Just put them in a folder, update the path and let the script do its work.
+As you can see, our input data follows a quite simple schema. However, in reality you might want to use transcripts from the [Azure Speech-to-Text Batch Transcription API](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/batch-transcription). However, since these transcripts are very detailed and verbose, I'd recommend to reduce them down a bit first. For example, you can run this basic scripts against a few of your sample documents: [cognitive-search-call-transcripts/preprocess.py](https://github.com/csiebler/cognitive-search-call-transcripts/blob/main/preprocess.py). Just put them in a folder, update the path and let the script do its work.
 
 One you have the transcripts converted, upload them to a new container in an Azure Storage Account.
 
@@ -39,7 +39,7 @@ Furthermore, be sure to have the following information at hand:
 * The Connection String, Name, and Access Key of your Storage Account
 * The account key and resource id of your Cognitive Services Resource
 
-In general, I"d recommend to use Managed Identities for data access, but for the sake of this tutorial it might be easier to just rely on keys. For production, always use Managed Identities if possible!
+In general, I'd recommend to use Managed Identities for data access, but for the sake of this tutorial it might be easier to just rely on keys. For production, always use Managed Identities if possible!
 
 Furthermore, for this tutorial I suggest to use the [VSCode Cognitive Search extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurecognitivesearch). This allows you to super easily create indexes, indexers, data sources, skillsets and synonym maps. Furthermore, it allows you to reset and run an indexer with a few clicks, so it makes development much faster!
 
@@ -47,7 +47,7 @@ Furthermore, for this tutorial I suggest to use the [VSCode Cognitive Search ext
 
 ### Data Source creation
 
-First, let"s upload your transcripts to a new container on the Storage Account. Once done, you can create a new data source in Cognitive Search. For this, update the credentials and container name in the following json document and use the VSCode Cognitive Search extension to create the data source.
+First, let's upload your transcripts to a new container on the Storage Account. Once done, you can create a new data source in Cognitive Search. For this, update the credentials and container name in the following json document and use the VSCode Cognitive Search extension to create the data source.
 
 ![Update your data source settings](/images/transcripts_data_sources.png "Update your data source settings")
 
@@ -73,7 +73,7 @@ You can find it in the Azure Portal or via the CLI:
 
 ![Resource ID in Azure Portal](/images/resource_id_transcripts.png "Resource ID in Azure Portal")
 
-Lastly, you will also need to add your `Storage Connection String`, so Cognitive Search can store its projections in an Azure Table. We"ll use this table to later generate real-time dashboards using PowerBI.
+Lastly, you will also need to add your `Storage Connection String`, so Cognitive Search can store its projections in an Azure Table. We'll use this table to later generate real-time dashboards using PowerBI.
 
 ![Update your skillset definition](/images/transcripts_skillset.png "Update your skillset definition")
 
@@ -97,7 +97,7 @@ Perfect, that looks good! Finally, we can run queries against our search index.
 
 Since your skillset creates a [Table Projection](https://docs.microsoft.com/en-us/azure/search/knowledge-store-projection-overview) of the data, we can point PowerBI to read from the Azure Table where the data is stored. From there, we can build a KPI dashboard for our transcripts.
 
-Follow [this tutorial](https://docs.microsoft.com/en-us/azure/search/knowledge-store-connect-power-bi) to connect PowerBI to your Azure Table with the projections. Once done, we can start building dashboards. In this case, the dashboards look a bit "lonely", but once we"d have real and more data in Cognitive Search, we"d be able to derive a lot of insight from it!
+Follow [this tutorial](https://docs.microsoft.com/en-us/azure/search/knowledge-store-connect-power-bi) to connect PowerBI to your Azure Table with the projections. Once done, we can start building dashboards. In this case, the dashboards look a bit "lonely", but once we'd have real and more data in Cognitive Search, we'd be able to derive a lot of insight from it!
 
 ![PowerBI dashboard example](/images/transcripts_powerbi_dashboard.png "PowerBI dashboard example")
 
