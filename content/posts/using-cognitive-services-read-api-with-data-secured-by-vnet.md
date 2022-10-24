@@ -4,7 +4,7 @@ date: 2022-02-22
 ---
 ## Introduction
 
-This post discusses how Cognitive Services can be used to process data that is securely stored behind a VNET. This allows to improve security further when processing sensitive data that is stored in Storage Accounts. In this post, we’ll look into using Read API (from the Azure Computer Vision API) to analyze documents that are heavily protected using networking rules.
+This post discusses how Cognitive Services can be used to process data that is securely stored behind a VNET. This allows to improve security further when processing sensitive data that is stored in Storage Accounts. In this post, we'll look into using Read API (from the Azure Computer Vision API) to analyze documents that are heavily protected using networking rules.
 
 This post also applies to other Cognitive Services, such as for example [Form Recognizer](https://azure.microsoft.com/en-us/services/form-recognizer/) or [Speech API](https://azure.microsoft.com/en-us/services/cognitive-services/speech-services/).
 
@@ -77,7 +77,7 @@ During the creation, make sure to enable **Managed Identity**. You can also alwa
 
 Next, click **Azure Role Assignments** on the same screen and select **Add role assignment**. Then, assign the **Storage Blob Data Reader** role to your **Storage Account**. Once done, you could send plain storage URLS without SAS tokens to Read API and it could read the data.
 
-Next, navigate to your Storage Account, select **Networking** and check the network settings. In our example here, we only allow access from **selected networks**. Ironically, we did not select any VNET, so the data can’t be accessed from anywhere, including Cognitive Services. However, we’ll add the **Cognitive Services Resource type** and then name of our **Cognitive Service instance**. This means our Cognitive Service can tunnel through this super-restrictive networking setting!
+Next, navigate to your Storage Account, select **Networking** and check the network settings. In our example here, we only allow access from **selected networks**. Ironically, we did not select any VNET, so the data can't be accessed from anywhere, including Cognitive Services. However, we'll add the **Cognitive Services Resource type** and then name of our **Cognitive Service instance**. This means our Cognitive Service can tunnel through this super-restrictive networking setting!
 
 ![Allowing our Cognitive Service resource to tunnel through the firewall](/images/networking_settings_storage.png "Allowing our Cognitive Service resource to tunnel through the firewall")
 
