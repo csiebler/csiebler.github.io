@@ -3,7 +3,8 @@
 # https://jpanther.github.io/congo/docs/getting-started/
 
 theme = "congo"
-baseURL = "https://csiebler.github.io"
+# baseURL = "https://csiebler.github.io"
+baseURL = "https://clemenssiebler.com"
 defaultContentLanguage = "en"
 
 enableRobotsTXT = true
