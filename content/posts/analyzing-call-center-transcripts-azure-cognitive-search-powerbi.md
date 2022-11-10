@@ -77,7 +77,7 @@ Lastly, you will also need to add your `Storage Connection String`, so Cognitive
 
 ![Update your skillset definition](/images/transcripts_skillset.png "Update your skillset definition")
 
-You can find the [full json here](https://github.com/csiebler/cognitive-search-call-transcripts/blob/main/cognitive_search/index.json).
+You can find the [full json here](https://github.com/csiebler/cognitive-search-call-transcripts/blob/main/cognitive_search/skillset.json).
 
 ### Indexer creation
 
@@ -85,7 +85,7 @@ Lastly, we create our indexer. Unless you added more fields to the index, you wo
 
 ![Indexer creation](/images/transcriptions_indexer.png "Indexer creation")
 
-You can find the [full json here](https://github.com/csiebler/cognitive-search-call-transcripts/blob/main/cognitive_search/index.json).
+You can find the [full json here](https://github.com/csiebler/cognitive-search-call-transcripts/blob/main/cognitive_search/indexer.json).
 
 Finally, we can run the indexer and check if our index contains documents:
 
