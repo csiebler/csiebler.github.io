@@ -34,6 +34,9 @@ Caller: Thank you.
 
 From this call, let's try to extract data points like call reason, accident location, involved persons, insurance numbers, damages and a short summary. If we can do this, this would allow to automatically ingest the details into the CRM. Typically, this is often done manually by agents - however, if we can automate it we can save the agent multiple minutes of work per call.
 
+![Azure OpenAI Service Studio](/images/azure_openai_studio_prompt.png "Azure OpenAI Service Studio")
+
+
 ## Information extraction with Azure OpenAI Service
 
 To extract all the data points, we'll be using OpenAI's most powerful GPT-3 model `text-davinci-002` with a temperature of `0.7`. We'll give it a generous `1500` tokens (the query typically uses under 1000 tokens). For the prompt, we'll use a zero-shot training approach by very precisely specifying  what we want GPT-3 to extract:
