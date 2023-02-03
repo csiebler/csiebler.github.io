@@ -81,4 +81,4 @@ Then, run the same code as above - `EnvironmentCredential()` will pull the envir
 
 ## Summary
 
-This post showed how we can use Azure Active Directory to authenticate at the [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/cognitive-services/openai-service/). This allows to onboard or offboard users to the service for testing, but also avoids potential key leakage.
+This post showed how we can use Azure Active Directory to authenticate at the [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/cognitive-services/openai-service/). This allows to onboard or offboard users to the service for testing and also avoids potential key leakage. This is not only useful during development phase, but also when moving use cases to production, like e.g., the use case we discussed in this post: [Using Azure OpenAI Service for processing claim calls](/posts/using-azure-openai-service-for-processing-claim-calls/).
