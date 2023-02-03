@@ -1,5 +1,5 @@
 ---
-title:Using Azure Active Directory (AAD) to authenticate with Azure OpenAI Service"
+title: "Using Azure Active Directory (AAD) to authenticate with Azure OpenAI Service"
 date: 2023-02-03
 ---
 ## Introduction
