@@ -143,7 +143,7 @@ If we remove the Resource instance definition, we would get the following messag
 
 Great, looks like it is working fine now!
 
-By the way, we can entirely avoid the secret to call the Cognitive Service itself. If you are interested, have a look at this blog post: Azure Active Directory (AAD) authentication for Azure Cognitive Services.
+By the way, we can entirely avoid the secret to call the Cognitive Service itself. If you are interested, have a look at this blog post: [Azure Active Directory (AAD) authentication for Azure Cognitive Services](/posts/azure-active-directory-aad-authentication-for-azure-cognitive-services/).
 
 ## Summary
 
