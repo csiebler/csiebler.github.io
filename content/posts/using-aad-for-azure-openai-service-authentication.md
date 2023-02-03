@@ -26,30 +26,30 @@ import requests
 from azure.identity import AzureCliCredential, ChainedTokenCredential, ManagedIdentityCredential, EnvironmentCredential
 
 # Azure OpenAI Service details
-endpoint =https://<replace with your name>.openai.azure.com"
-deployment =text-davinci-003" # Adapt to your model deployment
+endpoint = "https://<replace with your name>.openai.azure.com"
+deployment = "text-davinci-003" # Adapt to your model deployment
 
 # Define strategy which potential authentication methods should be tried to gain an access token
 credential = ChainedTokenCredential(ManagedIdentityCredential(), EnvironmentCredential(), AzureCliCredential())
 access_token = credential.get_token("https://cognitiveservices.azure.com/.default")
 
 headers = {
-   Content-Type":application/json",
-   Authorization": f"Bearer {access_token.token}"
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {access_token.token}"
 }
 
-prompt =""Write a tagline for an ice cream brand:"""
+prompt = """Write a tagline for an ice cream brand:"""
 
 payload = {
-   prompt": prompt,
-   max_tokens": 50,
-   temperature": 1,
-   top_p": 1,
-   echo": False,
-   n": 1,
-   stop": ["##"],
-   frequency_penalty": 1,
-   presence_penalty" : 1.5
+    "prompt": prompt,
+    "max_tokens": 50,
+    "temperature": 1,
+    "top_p": 1,
+    "echo": False,
+    "n": 1,
+    "stop": ["##"],
+    "frequency_penalty": 1,
+    "presence_penalty" : 1.5
 }
 
 params = {
