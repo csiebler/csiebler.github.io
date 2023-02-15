@@ -9,7 +9,9 @@ This post explains how you can authenticate to [Azure OpenAI Service](https://az
 * Easy on- and offboarding of new users via Azure Access Control (IAM)
 * Avoids key leakage or key re-use in other apps
 
-{{< yt vy07oWDa-8 >}}
+{{< youtube
+    id="vy07oWDa-8"
+    title="Azure OpenAI Service - API Access using AAD" >}}
 
 ## Authentication for an (interactive) AAD user
 
