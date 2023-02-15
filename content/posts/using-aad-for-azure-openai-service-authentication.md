@@ -9,62 +9,48 @@ This post explains how you can authenticate to [Azure OpenAI Service](https://az
 * Easy on- and offboarding of new users via Azure Access Control (IAM)
 * Avoids key leakage or key re-use in other apps
 
+{{< youtube "vy07oWDa-8" >}}
+
 ## Authentication for an (interactive) AAD user
 
 First, give your user the `Cognitive Services OpenAI User` role in `Access Control (IAM)` in the Azure Portal. This role allows to use the [Azure OpenAI Studio](https://oai.azure.com/), but does not allow to deploy models and change anything. Furthermore, this role does not have permission to retrieve the access keys.
 
-Next, install the [Azure Identity client library for Python](https://pypi.org/project/azure-identity/):
+Next, install the [Azure Identity client library for Python](https://pypi.org/project/azure-identity/) and the [OpenAI SDK](https://pypi.org/project/openai/):
 
 ```console
 pip install azure-identity
+pip install openai
 ```
 Then run the following Python script, but replace `endpoint` and `deployment` with your Azure OpenAI Service name/deployment. However, for this code to run you will need to be logged into the Azure CLI and selected the correct tenant/subscription.
 
 ```python
 import os
-import requests
+import openai
 from azure.identity import AzureCliCredential, ChainedTokenCredential, ManagedIdentityCredential, EnvironmentCredential
-
-# Azure OpenAI Service details
-endpoint = "https://<replace with your name>.openai.azure.com"
-deployment = "text-davinci-003" # Adapt to your model deployment
 
 # Define strategy which potential authentication methods should be tried to gain an access token
 credential = ChainedTokenCredential(ManagedIdentityCredential(), EnvironmentCredential(), AzureCliCredential())
 access_token = credential.get_token("https://cognitiveservices.azure.com/.default")
 
-headers = {
-    "Content-Type": "application/json",
-    "Authorization": f"Bearer {access_token.token}"
-}
+# Configure OpenAI SDK to use the access token
+openai.api_base = "https://<replace with your name>.openai.azure.com"
+openai.api_version = '2022-12-01'
+openai.api_type = 'azure_ad'
+openai.api_key = access_token.token
+deployment = "text-davinci-003"
 
+# Execute completion
 prompt = """Write a tagline for an ice cream brand:"""
-
-payload = {
-    "prompt": prompt,
-    "max_tokens": 50,
-    "temperature": 1,
-    "top_p": 1,
-    "echo": False,
-    "n": 1,
-    "stop": ["##"],
-    "frequency_penalty": 1,
-    "presence_penalty" : 1.5
-}
-
-params = {
-  'api-version': '2022-12-01'
-}
-r = requests.post(url=f"{endpoint}/openai/deployments/{deployment}/completions", headers=headers, params=params, json=payload)
-
-print(f"Status code: {r.status_code}")
-print(f"Response body: {r.json()}")
+response = openai.Completion.create(engine=deployment, prompt=prompt, max_tokens=100)
+text = response['choices'][0]['text']
+print(f"Response was: {text}")
 ```
 
-If all worked, you should see a similar JSON response:
+If all worked, you should see a similar response:
 
-```json
-{'id': 'cmpl-6fmbZTZG6XE0GxarP5UMBTwHTjWhC', 'object': 'text_completion', 'created': 1675416305, 'model': 'text-davinci-003', 'choices': [{'text': '\n\n"Nothing satisfies like our creamy, delicious ice cream!"', 'index': 0, 'finish_reason': 'stop', 'logprobs': None}], 'usage': {'completion_tokens': 14, 'prompt_tokens': 9, 'total_tokens': 23}}
+```
+Response was: 
+"Taste the Sweetness of Summer with our Creamy Ice Cream!"
 ```
 
 ## Authentication using a Service Principal (app registration)
