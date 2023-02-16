@@ -9,6 +9,8 @@ This post explains how you can authenticate to [Azure OpenAI Service](https://az
 * Easy on- and offboarding of new users via Azure Access Control (IAM)
 * Avoids key leakage or key re-use in other apps
 
+{{< youtube id="lvy07oWDa-8" >}}
+
 ## Authentication for an (interactive) AAD user
 
 First, give your user the `Cognitive Services OpenAI User` role in `Access Control (IAM)` in the Azure Portal. This role allows to use the [Azure OpenAI Studio](https://oai.azure.com/), but does not allow to deploy models and change anything. Furthermore, this role does not have permission to retrieve the access keys.
