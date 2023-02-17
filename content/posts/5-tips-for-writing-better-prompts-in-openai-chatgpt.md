@@ -1,10 +1,10 @@
 ---
-title: "5 tips for writing better prompts in Azure OpenAI Studio, OpenAI Playground or ChatGPT"
+title: "5 tips for writing better prompts in Azure OpenAI Studio, OpenAI Playground and ChatGPT"
 date: 2023-02-17
 ---
 ## Introduction video
 
-This vide post shares 5 tips you can use to write better and more effective prompts in [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/cognitive-services/openai-service/), OpenAI Playground or even in ChatGPT:
+This vide post shares 5 tips you can use to write better and more effective prompts in [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/cognitive-services/openai-service/), OpenAI Playground and in ChatGPT:
 
 {{< youtube id="leLPB3UjJlU" >}}
 
@@ -14,29 +14,41 @@ The the sections below for copy/pasting the example prompts.
 
 ### Tip 1
 ```
-Classify Microsoft, UBS, FedEx, Clemens Inc. into their verticals. Also add the revenue for 2020. If you don't know certain piece of information, say "N/A". 
+Classify Microsoft, UBS, FedEx, Clemens Inc. into their verticals.
+Also add the revenue for 2020. If you don't know certain piece of information, say "N/A". 
 ```
 
 ### Tip 2
 
 JSON:
 ```
-Classify Microsoft, UBS, FedEx, Clemens Inc. into their verticals. Also add the revenue for 2020. If you don't know certain piece of information, say "N/A". Answer in JSON using the keys company, vertical, revenue. Make it an array.
+Classify Microsoft, UBS, FedEx, Clemens Inc. into their verticals.
+Also add the revenue for 2020. If you don't know certain piece of information, say "N/A".
+Answer in JSON using the keys company, vertical, revenue. Make it an array.
 ```
 
 YAML:
 ```
-Classify Microsoft, UBS, FedEx, Clemens Inc. into their verticals. If you don't know certain piece of information, say "N/A". Also add the revenue for 2020. Answer as YML with keys company, vertical, revenue. Do proper newline formatting.
+Classify Microsoft, UBS, FedEx, Clemens Inc. into their verticals.
+If you don't know certain piece of information, say "N/A".
+Also add the revenue for 2020.
+Answer as YML with keys company, vertical, revenue. Do proper newline formatting.
 ```
 
 CSV:
 ```
-Classify Microsoft, UBS, FedEx, Clemens Inc. into their verticals. If you don't know certain piece of information, say "N/A". Also add the revenue for 2020. Answer as CSV and print the header "company, vertical, revenue".
+Classify Microsoft, UBS, FedEx, Clemens Inc. into their verticals.
+If you don't know certain piece of information, say "N/A".
+Also add the revenue for 2020.
+Answer as CSV and print the header "company, vertical, revenue".
 ```
 
 Markdown as table:
 ```
-Classify Microsoft, UBS, FedEx, Clemens Inc. into their verticals. If you don't know certain piece of information, say "N/A". Also add the revenue for 2020. Answer in markdown using a table.
+Classify Microsoft, UBS, FedEx, Clemens Inc. into their verticals.
+If you don't know certain piece of information, say "N/A".
+Also add the revenue for 2020.
+Answer in markdown using a table.
 ```
 
 ### Tip 3
