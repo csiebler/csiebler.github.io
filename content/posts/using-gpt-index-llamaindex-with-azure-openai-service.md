@@ -25,14 +25,12 @@ Next, make sure that you have `text-davinci-003` and `text-embedding-ada-002` de
 
 ![Azure OpenAI Service Model Deployments](/images/openai_model_deployments.png "Azure OpenAI Service Model Deployments")
 
-Then make sure we have `openai` and `llama-index` installed.
-
-Lastly, we can run the following code:
+Once we've installed `openai` and `llama-index` via `pip`, we can run the following code:
 
 {{< gist csiebler e287b791333011183792c08bad1dc140 >}}
 
-This will initialize `llama-index` to use Azure OpenAI Service, by setting a custom `LLMPredictor`. Once we have that, we use the `SimpleDirectoryReader` to read all text files from the `data/` directory.  We use `GPTSimpleVectorIndex` to create our index and lastly query it with a question.
+This will initialize `llama-index` to use Azure OpenAI Service, by setting a custom `LLMPredictor`. For this code to work, we'll need to have `OPENAI_API_KEY` and `OPENAI_API_BASE` set in our `env` (in this example we use `dotenv`). Once we have that, we use the `SimpleDirectoryReader` to read all text files from the `data/` directory.  We use `GPTSimpleVectorIndex` to create our index and lastly query it with a question.
 
 ## Summary
 
-In this blog post, we discussed how to use LlamaIndex 🦙 (GPT Index) and Azure OpenAI Service together to quickly index data and perform queries on it. Luckily, we only needed a few lines of configuration over using text-davinci-003 and text-embedding-ada-002 directly from openai.com.
+In this blog post, we discussed how to use LlamaIndex 🦙 (GPT Index) and Azure OpenAI Service together to quickly index data and perform queries on it. Luckily, we only needed a few lines of configuration over using `text-davinci-003` and `text-embedding-ada-002` directly from openai.com.
