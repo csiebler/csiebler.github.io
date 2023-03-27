@@ -14,7 +14,7 @@ In this post we briefly discuss how [LlamaIndex 🦙 (GPT Index)](https://gpt-in
 
 You can find the full example in the following notebook [qna-quickstart-with-llama-index.ipynb](https://github.com/csiebler/azure-openai-service-workshop/blob/main/qna-quickstart-with-gpt-index/qna-quickstart-with-llama-index.ipynb).
 
-First, create a `.env`and add your Azure OpenAI Service details:
+First, create a `.env` and add your Azure OpenAI Service details:
 
 ```
 OPENAI_API_KEY=xxxxxx
@@ -33,4 +33,4 @@ This will initialize `llama-index` to use Azure OpenAI Service, by setting a cus
 
 ## Summary
 
-In this blog post, we discussed how to use LlamaIndex 🦙 (GPT Index) and Azure OpenAI Service together to quickly index data and perform queries on it. Luckily, we only needed a few lines of configuration over using `text-davinci-003` and `text-embedding-ada-002` directly from openai.com.
+In this blog post, we discussed how to use LlamaIndex 🦙 (GPT Index) and Azure OpenAI Service together to quickly index data and perform queries on it. Luckily, we only needed a few lines of configuration over using `text-davinci-003` and `text-embedding-ada-002` directly from `openai.com`.
