@@ -55,7 +55,6 @@ Next, we can load up a bunch of text files, chunk them up and embed them. LangCh
 from langchain.document_loaders import DirectoryLoader
 from langchain.document_loaders import TextLoader
 from langchain.text_splitter import TokenTextSplitter
-from langchain.chains import RetrievalQAWithSourcesChain
 
 loader = DirectoryLoader('../data/qna/', glob="*.txt", loader_cls=TextLoader)
 
@@ -96,21 +95,35 @@ Let's ask a question:
 
 ```python
 chat_history = []
-query = "what is azure openai service?"
+query = "what is Azure OpenAI Service?"
 result = qa({"question": query, "chat_history": chat_history})
-print(result["answer"])
+
+print("Question:", query)
+print("Answer:", result["answer"])
 ```
 
 From where, we can also ask follow up questions:
 
 ```python
 chat_history = [(query, result["answer"])]
-query = "Does it support gpt-3, give a long answer"
+query = "Which regions does the service support?"
 result = qa({"question": query, "chat_history": chat_history})
-print(result["answer"])
+
+print("Question:", query)
+print("Answer:", result["answer"])
 ```
 
-Since we use the follow-up question prompt, LangChain converts the latest question to a follow up question, hence resolving it via the context.
+This should yield the following (or similar) output:
+
+```
+Question: what is Azure OpenAI Service?
+Answer: Azure OpenAI is a service that provides REST API access to OpenAI's language models, including GPT-3, Codex, and Embeddings. These models can be used for content generation, summarization, semantic search, and natural language to code translation. The service can be accessed through REST APIs, Python SDK, or a web-based interface in the Azure OpenAI Studio. Azure OpenAI offers virtual network support, managed identity, and responsible AI content filtering. However, access to the service is currently limited due to high demand and Microsoft's commitment to responsible AI.
+
+Question: Which regions does the service support?
+Answer: Azure OpenAI Service is currently available in the following regions: East US, South Central US, and West Europe.
+```
+
+Looks good! Since we use the follow-up question prompt, LangChain converts the latest question to a follow up question, hence resolving it via the context.
 
 ## Summary
 
