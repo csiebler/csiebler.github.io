@@ -4,7 +4,7 @@ date: 2023-04-03
 ---
 ## Introduction
 
-In this post we discuss how we can build a system that allows you to chat with your private data, similar to ChatGPT. For this, we'll be using [LangChain](https://docs.langchain.com/docs/) and [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/cognitive-services/openai-service). As the underlying Large Language Model, we'll be using `gpt-3.5-turbo` (the "ChatGPT" model).
+In this post we discuss how we can build a system that allows you to chat with your private data, similar to ChatGPT. For this, we'll be using [LangChain](https://docs.langchain.com/docs/), [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/cognitive-services/openai-service), and [Faiss](https://github.com/facebookresearch/faiss) as our vector store. As the underlying Large Language Model, we'll be using `gpt-3.5-turbo` (the "ChatGPT" model).
 
 ## Tutorial
 
@@ -20,12 +20,13 @@ Next, make sure that you have `gpt-35-turbo` and `text-embedding-ada-002` deploy
 ![Azure OpenAI Service Model Deployments](/images/model_deployments_chatgpt.png "Azure OpenAI Service Model Deployments")
 
 Let's install the latest versions of `openai` and `langchain` via `pip`:
+
 ```
 pip install openai --upgrade
 pip install langchain --upgrade
 ```
 
-First, let's initialize our Azure OpenAI Service connection and create the LangChain objects:
+Ok, let's start writing some code. First, let's initialize our Azure OpenAI Service connection and create the LangChain objects:
 
 ```python
 import os
@@ -48,7 +49,7 @@ llm = AzureChatOpenAI(deployment_name="gpt-35-turbo", openai_api_version="2023-0
 embeddings = OpenAIEmbeddings(model="text-embedding-ada-002", chunk_size=1)
 ```
 
-Next, we can load up a bunch of text files. You can download the sample data [here](https://github.com/microsoft/azure-openai-in-a-day-workshop/tree/main/data/qna).
+Next, we can load up a bunch of text files, chunk them up and embed them. LangChain supports a lot of different [document loaders](https://python.langchain.com/en/latest/modules/indexes/document_loaders.html), which makes it easy to adapt to other data sources and file formats. You can download the sample data [here](https://github.com/microsoft/azure-openai-in-a-day-workshop/tree/main/data/qna).
 
 ```python
 from langchain.document_loaders import DirectoryLoader
@@ -70,7 +71,7 @@ from langchain.vectorstores import FAISS
 db = FAISS.from_documents(documents=docs, embedding=embeddings)
 ```
 
-Lastly, we can create our document question-answering chat chain:
+Lastly, we can create our document question-answering chat chain. In this case, we specify the question prompt, which converts the user's question to a standalone question, in case the user asked a follow-up question:
 
 ```python
 from langchain.chains import ConversationalRetrievalChain
@@ -113,4 +114,4 @@ Since we use the follow-up question prompt, LangChain converts the latest questi
 
 ## Summary
 
-In this blog post, we discussed how we can use LangChain, Azure OpenAI Service, and Faiss, to build a ChatGPT-like experience, but over private data.
+In this blog post, we discussed how we can use LangChain, Azure OpenAI Service, and Faiss to build a ChatGPT-like experience, but over private data. We used embeddings and Faiss to enable the document retrieval step and then used the `gpt-3.5-turbo` model to generate an answer from the retrieved documents.
