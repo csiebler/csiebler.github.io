@@ -1,5 +1,5 @@
 ---
-title: "Azure OpenAI Service - Embeddings Tutorial"
+title: "Embeddings Tutorial using Azure OpenAI Service"
 date: 2023-04-18
 ---
 ## Introduction video
