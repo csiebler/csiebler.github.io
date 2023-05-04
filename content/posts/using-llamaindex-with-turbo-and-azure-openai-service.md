@@ -1,6 +1,6 @@
 ---
 title: "Using LlamaIndex and gpt-3.5-turbo (ChatGPT API) with Azure OpenAI Service"
-date: 2023-05-05
+date: 2023-05-04
 ---
 ## Introduction
 
