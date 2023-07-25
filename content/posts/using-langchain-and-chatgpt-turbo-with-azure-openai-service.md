@@ -14,6 +14,7 @@ First, create a `.env` and add your Azure OpenAI Service details:
 ```
 OPENAI_API_KEY=xxxxxx
 OPENAI_API_BASE=https://xxxxxxxx.openai.azure.com/
+OPENAI_API_VERSION=2023-05-15
 ```
 
 Next, make sure that you have `gpt-35-turbo` deployed and used the same name as the model itself for the deployment.
@@ -27,13 +28,13 @@ pip install openai --upgrade
 pip install langchain --upgrade
 ```
 
-This is super important, as older versions of the `openai` Python SDK do not support the API version needed to access `gpt-35-turbo`.
+Here, we're using `openai==0.27.8` and `langchain==0.0.240`. This is super important, as older versions of the `openai` Python SDK do not support the API version needed to access `gpt-35-turbo`.
 
 Finally, we can run our sample code:
 
 {{< gist csiebler 303ae7cf821a90abfebc12c73f4f6835 >}}
 
-By setting the `openai` configuration, we force LangChain (which uses the OpenAI Python SDK under the hood) to talk to Azure instead of OpenAI directly. By specifying `openai.api_version = "2023-03-15-preview"`, we make sure that the openai SDK uses the latest version, which is compatible with the turbo model version.
+By setting the `openai` configuration, we force LangChain (which uses the OpenAI Python SDK under the hood) to talk to Azure OpenAI instead of OpenAI directly.
 
 ## Summary
 

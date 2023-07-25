@@ -17,6 +17,7 @@ First, create a `.env` and add your Azure OpenAI Service details:
 ```
 OPENAI_API_KEY=xxxxxx
 OPENAI_API_BASE=https://xxxxxxxx.openai.azure.com/
+OPENAI_API_VERSION=2023-05-15
 ```
 
 Next, make sure that you have `text-davinci-003` and `text-embedding-ada-002` deployed and used the same name as the model itself for the deployment.
@@ -28,6 +29,8 @@ Let's install the latest versions of `openai` and `langchain` via `pip`:
 pip install openai --upgrade
 pip install langchain --upgrade
 ```
+
+Here, we're using `openai==0.27.8` and `langchain==0.0.240`.
 
 Finally, we can run our test code:
 
