@@ -15,23 +15,23 @@ First, create a `.env` and add your Azure OpenAI Service details:
 ```
 OPENAI_API_KEY=xxxxxx
 OPENAI_API_BASE=https://xxxxxxxx.openai.azure.com/
+OPENAI_API_VERSION=2023-05-15
 ```
-
 
 Next, make sure that you have `gpt-35-turbo` and `text-embedding-ada-002` deployed and used the same name as the model itself for the deployment.
 
 ![Azure OpenAI Service ChatGPT Model Deployment](/images/aoai_turbo_emb_deployments.png "Azure OpenAI Service ChatGPT Model Deployment")
 
-Let's install/upgrade to the latest versions of `openai` and `langchain` via `pip`:
+Let's install/upgrade to the latest versions of `openai`, `langchain`, and `llama-index` via `pip`:
 ```
 pip install openai --upgrade
 pip install langchain --upgrade
 pip install llama-index --upgrade
 ```
 
-{{< gist csiebler 32f371470c4e717db84a61874e951fa4 >}}
+Here, we're using `openai==0.27.8`, `langchain==0.0.240`, and `llama-index==0.7.11.post1`.
 
-As of writing this, there seems to be a bug where `openai_api_version` needs to be set to both the LLM and also the embedding model in order for this to work. If you experience any errors regarding the model not being found, using `openai.log = "debug"` is helpful to troubleshoot where calls are failing. In my case, it was because the api-version parameter of the API request was not properly set to the latest version.
+{{< gist csiebler 32f371470c4e717db84a61874e951fa4 >}}
 
 ## Summary
 
