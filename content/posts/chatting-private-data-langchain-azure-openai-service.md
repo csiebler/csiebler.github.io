@@ -13,6 +13,7 @@ First, create a `.env` and add your Azure OpenAI Service details:
 ```
 OPENAI_API_KEY=xxxxxx
 OPENAI_API_BASE=https://xxxxxxxx.openai.azure.com/
+OPENAI_API_VERSION=2023-05-15
 ```
 
 Next, make sure that you have `gpt-35-turbo` and `text-embedding-ada-002` deployed and used the same name as the model itself for the deployment.
@@ -26,6 +27,8 @@ pip install openai --upgrade
 pip install langchain --upgrade
 ```
 
+In this post, we're using `openai==0.27.8` and `langchain==0.0.240`.
+
 Ok, let's start writing some code. First, let's initialize our Azure OpenAI Service connection and create the LangChain objects:
 
 ```python
@@ -35,18 +38,18 @@ from dotenv import load_dotenv
 from langchain.chat_models import AzureChatOpenAI
 from langchain.embeddings import OpenAIEmbeddings
 
-# Load environment variables (set OPENAI_API_KEY and OPENAI_API_BASE in .env)
+# Load environment variables (set OPENAI_API_KEY, OPENAI_API_BASE, and OPENAI_API_VERSION in .env)
 load_dotenv()
 
 # Configure OpenAI API
 openai.api_type = "azure"
-openai.api_version = "2023-03-15-preview"
 openai.api_base = os.getenv('OPENAI_API_BASE')
 openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_version = os.getenv('OPENAI_API_VERSION')
 
 # Initialize gpt-35-turbo and our embedding model
-llm = AzureChatOpenAI(deployment_name="gpt-35-turbo", openai_api_version="2023-03-15-preview")
-embeddings = OpenAIEmbeddings(model="text-embedding-ada-002", chunk_size=1)
+llm = AzureChatOpenAI(deployment_name="gpt-35-turbo")
+embeddings = OpenAIEmbeddings(deployment_id="text-embedding-ada-002", chunk_size=1)
 ```
 
 Next, we can load up a bunch of text files, chunk them up and embed them. LangChain supports a lot of different [document loaders](https://python.langchain.com/en/latest/modules/indexes/document_loaders.html), which makes it easy to adapt to other data sources and file formats. You can download the sample data [here](https://github.com/microsoft/azure-openai-in-a-day-workshop/tree/main/data/qna).
@@ -56,7 +59,7 @@ from langchain.document_loaders import DirectoryLoader
 from langchain.document_loaders import TextLoader
 from langchain.text_splitter import TokenTextSplitter
 
-loader = DirectoryLoader('../data/qna/', glob="*.txt", loader_cls=TextLoader)
+loader = DirectoryLoader('data/qna/', glob="*.txt", loader_cls=TextLoader, loader_kwargs={'autodetect_encoding': True})
 
 documents = loader.load()
 text_splitter = TokenTextSplitter(chunk_size=1000, chunk_overlap=0)
