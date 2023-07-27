@@ -68,7 +68,7 @@ acs = AzureSearch(azure_search_endpoint=os.getenv('AZURE_COGNITIVE_SEARCH_SERVIC
                  embedding_function=embeddings.embed_query)
 ```
 
-If the Azure Search index does not exist yet, it will be automatically created.
+If the Azure Search index does not exist yet, it will be created automatically.
 
 Next, we can load up a bunch of text files, chunk them up and embed them. LangChain supports a lot of different [document loaders](https://python.langchain.com/en/latest/modules/indexes/document_loaders.html), which makes it easy to adapt to other data sources and file formats. You can download the sample data [here](https://github.com/microsoft/azure-openai-in-a-day-workshop/tree/main/data/qna).
 
