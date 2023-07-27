@@ -4,6 +4,8 @@ date: 2023-07-27
 ---
 ## Introduction
 
+![Logo](/images/azure_openai_seach_langchain.png)
+
 Recently, Azure Cognitive Search introduced [vector search](https://learn.microsoft.com/en-us/azure/search/vector-search-overview) for indexing, storing, and retrieving vector embeddings from a search index. In this post, we'll look into how we can use this to chat with your private data, similar to ChatGPT. So besides [Azure Cognitive Search](https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search) we'll be using [LangChain](https://docs.langchain.com/docs/) and [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/cognitive-services/openai-service). As the underlying Large Language Model, we'll be using `gpt-3.5-turbo` (the "ChatGPT" model).
 
 ## Tutorial
