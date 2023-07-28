@@ -140,3 +140,5 @@ Looks good! Since we use the follow-up question prompt, LangChain converts the l
 ## Summary
 
 In this blog post, we discussed how we can use Azure Cognitive Search, LangChain, and Azure OpenAI Service to build a ChatGPT-like experience, but over private data. We used embeddings and Azure Cognitive Search to enable the document retrieval step and then used the `gpt-3.5-turbo` model to generate an answer from the retrieved documents.
+
+Special thanks goes to [Fabrizio Ruocco](https://www.linkedin.com/in/fabrizioruocco/) who pushed the PR for Azure Cognitive Search integration to LangChain!
