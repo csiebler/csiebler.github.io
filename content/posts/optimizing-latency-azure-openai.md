@@ -6,6 +6,8 @@ date: 2023-08-01
 
 In this post we'll be looking into measuring and optimizing [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/cognitive-services/openai-service) response latency by evaluating the deployed endpoints Azure OpenAI endpoints on a global scale. By optimizing latency, we can enable more real-time use cases, as well as maximize throughput for batch workloads. Our main goal in this exercise to avoid latency peaks that might show up here and there if any of the regions experiences significant load (noisy neighbors) or if we're running into API rate limits.
 
+This can be used to optimize latency for `gpt-35-turbo`, but can also be applied to `gpt-4` model series.
+
 ## Ideas for optimizing latency
 
 If we want to build a "latency-optimized" app using Azure OpenAI, we could do the following approach:
@@ -154,7 +156,7 @@ A response from a single prompt will look like this:
 }
 ```
 
-Overall cost per call is 15 tokens, which would cost us `30 days * 24 hours * 60 minutes * 4 requests/minute * 15 tokens * $0.002 / 1000 tokens = $5.2 / month` per region in a month. Not sure if we need to test every every 15 seconds, or if every minute is sufficient.
+Overall cost per call is 15 tokens, which would cost us `30 days * 24 hours * 60 minutes * 4 requests/minute * 15 tokens * $0.002 / 1000 tokens = $5.2 / month` per region in a month. Not sure if we need to test every every 15 seconds, or if every minute is sufficient. In terms of requests/minute, Azure OpenAI gives 1440 requests/minute per region and subscription, so sacrificing 4 calls is less than 0.3%.
 
 Running the script over a period yields data such as:
 ```
