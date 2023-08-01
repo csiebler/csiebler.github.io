@@ -204,10 +204,6 @@ We can clearly see that `japaneast` is the slowest, but as discussed before, lat
 
 ## Moving forward
 
-While the above script is functional, a practical application should account for the following points.
-
-### Execution
-
 While the above script is functional, a practical application should account for:
 
 1. **Execution:** The script could be executed with a timer in an Azure Function, persisting results into Azure Blob or Azure CosmosDB. The app would then query the current status periodically, caching responses and making regional choices based on current latency and the rolling average.
