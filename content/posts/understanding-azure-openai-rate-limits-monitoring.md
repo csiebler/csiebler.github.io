@@ -52,7 +52,7 @@ Let's discuss this through an example. Let's say we have 1000 TPMs, therefore 6 
 
 Let's make sure that our understanding is correct, so let's test it out. Firstly, I've deployed `gpt-35-turbo` with a limit of 1k TPM, which should give us 6 RPM. I choose such a low limit to be easily able to hit the limits (TPM or RPM) from my local machine.
 
-![Azure OpenAI Service Model Deployment with 1k TPM](/turbo_model_deployment_1k_tpm.png "Azure OpenAI Service Model Deployment with 1k TPM")
+![Azure OpenAI Service Model Deployment with 1k TPM](/images/turbo_model_deployment_1k_tpm.png "Azure OpenAI Service Model Deployment with 1k TPM")
 
 Furthermore, create a `.env` and persist the `ENDPOINT` and `KEY` in it:
 ```
@@ -98,7 +98,7 @@ If we look at the log output, we should see the following:
 
 If we look at the monitoring tab for the resource and show "Successful calls" and "Blocked calls", we see exactly this behavior:
 
-![Azure OpenAI request per minute rate limit test](/azure_openai_requests_per_minute_test.png "Azure OpenAI request per minute rate limit test")
+![Azure OpenAI request per minute rate limit test](/images/azure_openai_requests_per_minute_test.png "Azure OpenAI request per minute rate limit test")
 
 ### Tokens per Minute Rate Limit
 
@@ -115,7 +115,7 @@ Our log output will show the following:
 
 The monitoring tab will confirm this:
 
-![Azure OpenAI tokens per minute rate limit test](/azure_openai_max_tokens_per_minute_test.png "Azure OpenAI tokens per minute rate limit test")
+![Azure OpenAI tokens per minute rate limit test](/images/azure_openai_max_tokens_per_minute_test.png "Azure OpenAI tokens per minute rate limit test")
 
 So everything works as expected!
 
