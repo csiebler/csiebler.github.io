@@ -1,6 +1,6 @@
 ---
 title: "Monitoring and understanding Azure OpenAI's rate limits"
-date: 2023-08-02
+date: 2023-08-01
 ---
 ## Introduction
 
