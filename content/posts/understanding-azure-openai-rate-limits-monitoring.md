@@ -33,17 +33,13 @@ When either the TPM or RPM limit is reached, the API begins to return `429` erro
 
 Upon inspecting [the documentation (Understanding rate limits)](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota#understanding-rate-limits), we quickly realize that it's not as simple as it might seem. For instance, the explanation of the TPM rate limit might be slightly confusing:
 
-```
-TPM rate limits are based on the maximum number of tokens that are estimated to be processed by a request at the time the request is received. It isn't the same as the token count used for billing, which is computed after all processing is completed.
-```
+> TPM rate limits are based on the maximum number of tokens that are estimated to be processed by a request at the time the request is received. It isn't the same as the token count used for billing, which is computed after all processing is completed.
 
 So, what does this imply? The TPM limit is estimated by `Prompt text and count`, `max_tokens parameter setting`, and `best_of parameter setting`. This is logical since the API needs to anticipate the total tokens of a request prior to execution. But as it can't predict the completion length, it uses the `max_tokens` provided by the user. `best_of` acts as a multiplier if the user asks for additional completions. So, once the token limit based on these estimations is hit within a minute, the API starts returning 429.
 
 Now let's focus on RPMs:
 
-```
-RPM rate limits are based on the number of requests received over time. The rate limit expects that requests be evenly distributed over a one-minute period...To implement this behavior, Azure OpenAI Service evaluates the rate of incoming requests over a small period of time, typically 1 or 10 seconds.
-```
+> RPM rate limits are based on the number of requests received over time. The rate limit expects that requests be evenly distributed over a one-minute period...To implement this behavior, Azure OpenAI Service evaluates the rate of incoming requests over a small period of time, typically 1 or 10 seconds.
 
 Consider an example where we have 1000 TPMs, which equates to 6 RPM. This implies we should have one request in a 10-second window. If another request is sent within this 10-second window, a `429` error should be received.
 
