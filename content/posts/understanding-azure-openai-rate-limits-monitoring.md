@@ -122,6 +122,4 @@ Now that we understand how the rate limiting works in detail, what can we learn 
 1. Increase the quota assigned to your model or distribute the load across multiple subscriptions or regions to optimize performance (also refer to [Optimizing latency for Azure OpenAI Service](https://clemenssiebler.com/posts/optimizing-latency-azure-openai/)). Consider fallback options such as `turbo-16k` or `gpt-4-32k` when reaching the quota limits of `turbo` or `gpt-4-8k`. These alternatives have independent quota buckets within the Azure OpenAI Service.
 1. Implement retry logic into your code. This strategy is particularly beneficial when you encounter request rate limits, as these limits reset after each 10-second window. Depending on your quota, the reset time might be even faster.
 
-## Summary
-
-This guide should have clarified the rate limiting mechanisms of Azure OpenAI Service. Key takeaways include ensuring the `max_tokens` value is kept as small as reasonable, confirming that your TPM and corresponding RPM are suitable for your workload pattern, and implementing robust retry logic and potentially leveraging multiple regions. For further information, check out my previous post on [Optimizing latency for Azure OpenAI Service](https://clemenssiebler.com/posts/optimizing-latency-azure-openai/).
+Happy "rate-limit-avoiding"!
