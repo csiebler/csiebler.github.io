@@ -57,7 +57,7 @@ pip install azure-search-documents --pre --upgrade
 </span></span></span><span class=line><span class=cl><span class=s2>Standalone question:&#34;&#34;&#34;</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=n>qa</span> <span class=o>=</span> <span class=n>ConversationalRetrievalChain</span><span class=o>.</span><span class=n>from_llm</span><span class=p>(</span><span class=n>llm</span><span class=o>=</span><span class=n>llm</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>                                           <span class=n>retriever</span><span class=o>=</span><span class=n>db</span><span class=o>.</span><span class=n>as_retriever</span><span class=p>(),</span>
+</span></span><span class=line><span class=cl>                                           <span class=n>retriever</span><span class=o>=</span><span class=n>acs</span><span class=o>.</span><span class=n>as_retriever</span><span class=p>(),</span>
 </span></span><span class=line><span class=cl>                                           <span class=n>condense_question_prompt</span><span class=o>=</span><span class=n>CONDENSE_QUESTION_PROMPT</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>                                           <span class=n>return_source_documents</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>                                           <span class=n>verbose</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span>
