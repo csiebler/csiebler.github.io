@@ -97,7 +97,7 @@ Follow Up Input: {question}
 Standalone question:""")
 
 qa = ConversationalRetrievalChain.from_llm(llm=llm,
-                                           retriever=db.as_retriever(),
+                                           retriever=acs.as_retriever(),
                                            condense_question_prompt=CONDENSE_QUESTION_PROMPT,
                                            return_source_documents=True,
                                            verbose=False)
