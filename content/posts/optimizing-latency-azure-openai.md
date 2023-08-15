@@ -4,9 +4,11 @@ date: 2023-08-01
 ---
 ## Introduction
 
-In this post we'll be looking into measuring and optimizing [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/cognitive-services/openai-service) response latency by evaluating the deployed endpoints Azure OpenAI endpoints on a global scale. By optimizing latency, we can enable more real-time use cases, as well as maximize throughput for batch workloads. Our main goal in this exercise to avoid latency peaks that might show up here and there if any of the regions experiences significant load (noisy neighbors) or if we're running into API rate limits.
+In this post we'll be looking into measuring and optimizing [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/cognitive-services/openai-service) response latency by evaluating the deployed endpoints Azure OpenAI endpoints on a global scale. By optimizing latency, we can enable more real-time use cases, as well as maximize throughput for batch workloads. Our main goal in this exercise to reduce latency peaks that might show up here and there if any of the regions experiences significant load (noisy neighbors) or if we're running into API rate limits.
 
 This can be used to optimize latency for `gpt-35-turbo`, but can also be applied to `gpt-4` model series.
+
+A word of caution, the solution discussed here won't be perfect and won't be able to avoid latency peaks completely. If you want to run latency sensitive use cases on Azure OpenAI where you can't tolerate any peaks, I'd suggest to talk to your Microsoft Sales person regarding the [Provisioned Throughput Model](https://techcommunity.microsoft.com/t5/azure-ai-services-blog/generative-ai-for-developers-exploring-new-tools-and-apis-in/ba-p/3817003#:~:text=Provisioned%20Throughput%20Model&text=It%20provides%20a%20dedicated%20connection,with%20limited%20access%20in%20June.), which offers dedicated Azure OpenAI throughput capacity.
 
 ## Ideas for optimizing latency
 
@@ -212,4 +214,4 @@ While the above script is functional, a practical application should account for
 
 ## Summary
 
-This post has presented an easy approach to measure Azure OpenAI response latency across the globe. By sending a tiny prompt, waiting for its completion, and then choosing the best-performing region, we can optimize our actual API calls and hopefully minimize latency spikes.
+This post has presented an easy approach to measure Azure OpenAI response latency across the globe. By sending a tiny prompt, waiting for its completion, and then choosing the best-performing region, we can optimize our actual API calls and hopefully minimize latency spikes. While this will likely reduce the latency spikes you'll see, it won't fully eliminate them. If your workload can't tolerate any any spikes, I'd suggest you to talk to your Microsoft Sales person regarding the [Provisioned Throughput Model](https://techcommunity.microsoft.com/t5/azure-ai-services-blog/generative-ai-for-developers-exploring-new-tools-and-apis-in/ba-p/3817003#:~:text=Provisioned%20Throughput%20Model&text=It%20provides%20a%20dedicated%20connection,with%20limited%20access%20in%20June.). 
