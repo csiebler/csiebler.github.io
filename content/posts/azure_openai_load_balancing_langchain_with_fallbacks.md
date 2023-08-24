@@ -78,7 +78,7 @@ for i in range (1,10):
 
 Easy! This code will run happily and choose the `8k` model, but in case it fails (we set `max_retries=0`), it will fall back to the `32k` model and will keep retrying until it gives up (per default 6 tries). All we needed to do was create an `AzureChatOpenAI` for each model, and then configure the fallback. The remainder of the LangChain code stayed the same, so adding this to an existing codebases is pretty easy.
 
-In summary, this approach the following pros:
+In summary, this approach the following benefits:
 * Only requires one Azure OpenAI resource
 * Great for `gpt4`, where the quota is lower and quota increases are harder to get
 
@@ -154,7 +154,7 @@ for i in range (1,10):
 
 Same as before, we use the `with_fallbacks()` option from LangChain to fall back to the next model, then the next model, and so on. For the last model, we keep the `max_retries` at `6`, to have a last resort for retries.
 
-In summary, this approach the following pros:
+In summary, this approach the following benefits:
 * Very large scalability
 
 Its downsides are:
