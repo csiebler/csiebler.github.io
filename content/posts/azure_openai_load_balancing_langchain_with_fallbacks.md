@@ -6,6 +6,8 @@ date: 2023-08-24
 
 In this post we'll be looking into simple and quick ways to implement load balancing for Azure OpenAI using LangChain. In my last poste [A Guide to Azure OpenAI Service's Rate Limits and Monitoring](https://clemenssiebler.com/posts/understanding-azure-openai-rate-limits-monitoring/) we discussed how rate limits can negatively affect throughput and latency when running completions, so in this post, we'll dive deeper and look at a few simple, practical solutions.
 
+Both approaches outlined in this post achieve similar results as using an external load balancer, but are significantly easier to implement. However, neither approach splits up the load between multiple instances equally (e.g., using round-robin), but rather balance load to the next model once its limits are reached.
+
 ## Solutions
 
 To run the code examples, make sure you have the latest versions of `openai` and `langchain` installed:
@@ -170,4 +172,4 @@ Lastly, we should still handle our Azure OpenAI calls with a try/catch block, ju
 
 ## Key Takeaways
 
-In this post we've discussed two simple ways on how to implement simple fallback mechanisms with LangChain that easily help us avoiding any token or rate limits in Azure OpenAI.
+In this post we've discussed two simple ways on how to implement simple fallback mechanisms with LangChain that easily help us avoiding any token or rate limits in Azure OpenAI. These approaches are especially great for dealing with token limits, however, if you are looking for a real load-balancing approach on the `http` layer, have a look at [this post](https://www.raffertyuy.com/raztype/azure-openai-load-balancing/).
