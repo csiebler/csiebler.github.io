@@ -19,9 +19,11 @@ In this post, we'll be using `openai==0.27.9` and `langchain==0.0.271`.
 
 ### Falling back to a larger model
 
+One simple way to deal with the token or rate limit is to use a different or larger model when this happens. So instead of retrying and waiting for the same model to become "useable" again, we just switch to a larger model.
+
 ![Fallback to a larger model](/images/fallback_larger_model.png)
 
-One simple way to deal with the token or rate limit is to use a different or larger model when this happens. So instead of retrying and waiting for the same model to become "useable" again, we just switch to a larger model. This is especially useful when using `gpt4` on Azure OpenAI, as the default TPM (token per minute) limit for `gpt4-8k` is only 20k TPM. However, since we get an additional 60k TPM for `gpt4-32k`, why not use them? Surely, there is some additional, higher cost associated with this (the `32k` model is more expensive for both prompt and completion tokens), but if throughput is the limiting factor, this is an easy fix.
+ This approach is especially useful when using `gpt4` on Azure OpenAI, as the default TPM (token per minute) limit for `gpt4-8k` is only 20k TPM. However, since we get an additional 60k TPM for `gpt4-32k`, why not use them? Surely, there is some additional, higher cost associated with this (the `32k` model is more expensive for both prompt and completion tokens), but if throughput is the limiting factor, this is an easy fix.
 
 To get this going, let's first make sure we have both models deployed:
 ![Azure OpenAI gpt4-8k and gpt4-32k model deployments](/images/gpt4_8k_32k_deployments.png)
@@ -74,7 +76,15 @@ for i in range (1,10):
     print(result)
 ```
 
-Easy! This code will run happily and choose the `8k` model, but in case it fails (we set `max_retries=0`), it will fall back to the `32k` model and will keep retrying until it gives up (per default 6 tries). All we needed to do was create an `AzureChatOpenAI` for each model, and then configure the fallback. The remainder of the LangChain code stayed the same, so adding this to an existing codebase is pretty easy.
+Easy! This code will run happily and choose the `8k` model, but in case it fails (we set `max_retries=0`), it will fall back to the `32k` model and will keep retrying until it gives up (per default 6 tries). All we needed to do was create an `AzureChatOpenAI` for each model, and then configure the fallback. The remainder of the LangChain code stayed the same, so adding this to an existing codebases is pretty easy.
+
+In summary, this approach the following pros:
+* Only requires one Azure OpenAI resource
+* Great for `gpt4`, where the quota is lower and quota increases are harder to get
+
+Its downsides are:
+* Typically more costly
+* Limited scalability (mostly due to the fact that getting access to `gpt4` can still take some time)
 
 ### Falling back to multiple, but the same models
 
@@ -144,6 +154,20 @@ for i in range (1,10):
 
 Same as before, we use the `with_fallbacks()` option from LangChain to fall back to the next model, then the next model, and so on. For the last model, we keep the `max_retries` at `6`, to have a last resort for retries.
 
+In summary, this approach the following pros:
+* Very large scalability
+
+Its downsides are:
+* Requires multiple Azure OpenAI resources, potentially multiple subscriptions
+
+## Considerations
+
+For both approaches, it is important to consider under which conditions the `with_fallbacks()` method should be invoked. In our code example, we fall back on any error, but there might be use cases where we want to limit this to only token or rate limiting events. This can be easily adapted by adding the `exceptions_to_handle` parameter.
+
+Furthermore, we should also consider setting the `request_timeout` for the model itself. In order to avoid slow API calls, we could directly fall back to the next model after a timeout of e.g., 10 seconds. This can be easily achieved by creating the `AzureChatOpenAI()` connections with the `request_timeout=10` parameter.
+
+Lastly, we should still handle our Azure OpenAI calls with a try/catch block, just to make sure that we have an escape route in case everything fails.
+
 ## Key Takeaways
 
-In this post we've discussed two simple ways on how to implement simple fallback mechanisms with LangChain that easily help us avoiding and token or rate limits in Azure OpenAI.
+In this post we've discussed two simple ways on how to implement simple fallback mechanisms with LangChain that easily help us avoiding any token or rate limits in Azure OpenAI.
