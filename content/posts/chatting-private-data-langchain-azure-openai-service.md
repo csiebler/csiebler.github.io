@@ -48,7 +48,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 openai.api_version = os.getenv('OPENAI_API_VERSION')
 
 # Initialize gpt-35-turbo and our embedding model
-llm = AzureChatOpenAI(deployment_name="gpt-35-turbo")
+llm = AzureChatOpenAI(deployment_name="gpt-35-turbo", temperature=0)
 embeddings = OpenAIEmbeddings(deployment_id="text-embedding-ada-002", chunk_size=1)
 ```
 
