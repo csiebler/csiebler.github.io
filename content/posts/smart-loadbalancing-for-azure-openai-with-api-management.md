@@ -4,58 +4,61 @@ date: 2023-12-20
 ---
 ## Introduction
 
-In this post we'll walk through bundling multiple Azure OpenAI resources behind a single API endpoint using Azure API Management (APIM). There have been many posts on this before, but in this article we'll look into doing it in a much smarter way. This allows us to solve the following use cases:
+In this post, we will guide you through the process of consolidating various Azure OpenAI resources behind a unified API endpoint using Azure API Management (APIM). While there have been numerous discussions on this topic previously, this article focuses on a more sophisticated approach. This method enables us to address the following use cases:
 
-1. Spillover from Provisioned Throughput Units in Azure OpenAI ("committed capacity") to Pay-as-you-go in case you reach the limits of your commited capacity
-1. Bundling multiple Azure OpenAI resources in potentially multiple regions, but give priority to the in-region resources
-1. A combination of both
+1. Aggregating multiple Azure OpenAI resources, potentially across various regions, with a preference for prioritizing in-region resources.
+1. Handling spillover from Provisioned Throughput Units in Azure OpenAI ("committed capacity") to Pay-as-you-go in case the limits of your committed capacity are reached.
+1. A combination of both scenarios.
 
-My colleague Andrew Dewes came up with this original idea and implementation, and all code from this post can be found under [andredewes/apim-aoai-smart-loadbalancing](https://github.com/andredewes/apim-aoai-smart-loadbalancing/tree/main).
+
+My colleague, Andrew Dewes, originated this idea and its implementation. You can find all the code from this post under: [andredewes/apim-aoai-smart-loadbalancing](https://github.com/andredewes/apim-aoai-smart-loadbalancing/tree/main).
 
 To recap, in Azure OpenAI you have the following throughput constraints:
 
 * **Pay-as-you-go**
- * Within each region and subscription, you have a certain Tokens-per-Minute (TPM) and Requests-per-Minute (RPM) limit per model
- * Those limits can be increased by using the "Request Quota" link within the Azure OpenAI Studio
- * If you're out of TPMs or RPMs in a certain region and/or subscription, we'll receive `429` errors
- * As a mitigation you can then either place your API calls in another region or use a different subscription
-* **Provisioned Throughput Units (PTUs)**
- * In the committed capacity case, you provision a set of PTUs that give you a certain amount of throughput (which depends on your workload pattern)
- * If you reach 100% utilization of your given throughput, we'll receive `429` errors
- * In this case you can either provision more PTUs or fall back to Pay-as-you-go
+ * Within each region and subscription, there are specific Tokens-per-Minute (TPM) and Requests-per-Minute (RPM) limits per model.
+ * These limits can be increased by using the "Request Quota" link within the Azure OpenAI Studio.
+ * If we exhaust TPMs or RPMs in a particular region and/or subscription, we will encounter `429` errors.
+ * As a mitigation, we can either redirect our API calls to another region or utilize a different subscription.
 
-So to simplify this process, we can leverage APIM and "hide" multiple Azure OpenAI resources behind it, as depicted in this diagram:
+* **Provisioned Throughput Units (PTUs)**
+ * In the committed capacity scenario, we provision a set of PTUs that offer a designated throughput (dependent on our workload pattern).
+ * Upon reaching 100% utilization of our allocated throughput, we will encounter `429` errors.
+ * In this situation, we can either provision additional PTUs or revert to Pay-as-you-go.
+ 
+ To streamline this process, we can leverage APIM and "hide" multiple Azure OpenAI resources behind it, as illustrated in this diagram:
 
 ![APIM Load Balancing Architecture](/images/apim-load-balancing.png "APIM Load Balancing Architecture")
 
-The groups of resources can contain one or more Azure OpenAI endpoints, but the trick is to give each group a priority. This enables us to first exhaust committed capacity, and then fail over to a Pay-as-you-go resource, or alternatively, gives us the chance to first leverage resources within the region, before we do cross-region API calls. If all resources are exhausted, we'll revert back to the first resource and send its reply back to the API caller.
+The groups of resources can contain one or more Azure OpenAI endpoints, with the key being to assign a priority to each group. This approach allows us to first utilize committed capacity, subsequently transitioning to Pay-as-you-go resources if needed. Alternatively, it offers the flexibility to prioritize resources within the region before doing cross-region API calls. In the event of all resources being exhausted, we will revert back to the initial resource and relay its response to the API caller.
 
 ## Tutorial
 
 ### Provision Azure API Management
 
-
-Firstly, we want to provision an [Azure API Management instance](https://learn.microsoft.com/en-us/azure/api-management/get-started-create-service-instance) and ensure that we enable `Managed Identity` during provisioning. It'll make most sense to put this APIM instance in the same region where our primary Azure OpenAI instance lives.
+Firstly, we want to provision an [Azure API Management instance](https://learn.microsoft.com/en-us/azure/api-management/get-started-create-service-instance) and ensure that we enable `Managed Identity` during provisioning. It'll make most sense to put our APIM instance in the same region where our primary Azure OpenAI instance lives in.
 
 To get started, use the Azure Portal to provision an API Management instance:
 ![Provision APIM instance](/images/provision_api_management.png "Provision APIM instance")
 
-For the [pricing tier](https://azure.microsoft.com/en-us/pricing/details/api-management/), use the tier that suits your needs, I've tested with `Developer` and `Basic` tiers.
+For the [pricing tier](https://azure.microsoft.com/en-us/pricing/details/api-management/), use the tier that suits our needs, I've tested with `Developer` and `Basic` tiers.
+
 ![Create your APIM instance](/images/create_apim.png "Create your APIM instance")
 
-Lastly, don't forget to enable Managed Identity during provisioning:
+Lastly, we shouldn't forget to enable Managed Identity during provisioning:
+
 ![Enable Managed Identity during provisioning](/images/apim_enable_managed_identity.png "Enable Managed Identity during provisioning")
 
 ### Provision Azure OpenAI and assign Managed Identity
 
-Next, make sure you have your Azure OpenAI resources ready. As we'll be routing API calls via APIM to the different resources, we'll need to make sure that each Azure OpenAI resources has the same models (type and version) deployed - most importantly - with the same name. So for example:
+Next, ensure that your Azure OpenAI resources are prepared. Since we will be directing API calls through APIM to multiple resources, it is essential to confirm that each Azure OpenAI resource has the same models (type and version) deployed, and, crucially, with identical names. For instance:
 
 * Azure OpenAI resource 1 -> Model deployment with name `gpt-4-8k-0613` (model type: `gpt-4-8k`, version: `0613`)
 * Azure OpenAI resource 2 -> Model deployment with name `gpt-4-8k-0613` (model type: `gpt-4-8k`, version: `0613`)
 
-I suggest using a consistent naming schema for each deployment, encoding the model type and version in its name (e.g., `gpt-4-turbo-1106`).
+I recommend adopting a uniform naming scheme for each deployment by encoding the model type and version in its name (e.g., `gpt-4-turbo-1106`).
 
-To finish this step, we need to grant API Management access to our Azure OpenAI resources, but for security reasons, let's avoid API keys. For this, we need to add the Managed Identity of the APIM to each of the Azure OpenAI resources, using the `Cognitive Services OpenAI User` permission. You can already do this while the APIM instance is still provisioning.
+To complete this step, we must provide API Management with access to our Azure OpenAI resources. However, for security considerations, let's refrain from using API keys. Instead, we should add the `Managed Identity` of the APIM to each Azure OpenAI resource, granting it the `Cognitive Services OpenAI User` permission. We may perform this step while the APIM instance is still in the provisioning stage.
 
 So for each Azure OpenAI Service instance, we need to add the Managed Identity of the API Management. For this, goto each Azure OpenAI instance in the Azure Portal, click `Access control (IAM)`, click `+ Add`, click `Add role assignment`, select the role `Cognitive Services OpenAI User`:
 
@@ -85,7 +88,7 @@ Once downloaded, open `inference.json` in the editor of your choice and update t
 
 We won't use this, but in order to import the file into API Management, we need to a correct URL there.
 
-Now, go to your API Management instance in the Azure Portal, then select `API` on the left side, click `+ Add API` and select `OpenAPI`. In the dialog, load your `inference.json` and make sure to set `API URL suffix` to `openai`. Then click `Create`.
+Now, let's go to our API Management instance in the Azure Portal, then select `API` on the left side, click `+ Add API` and select `OpenAPI`. In the dialog, load our `inference.json` and make sure to set `API URL suffix` to `openai`. Then click `Create`.
 
 ![Create API definition](/images/create_api_definition.png "Create API definition")
 
@@ -163,4 +166,4 @@ ChatCompletion(id='chatcmpl-8XnvnKVt0KFORZw5Z0T3I9Z45fpnP', choices=[Choice(fini
 
 ## Summary
 
-In this post, we showed how we can bundle multiple Azure OpenAI resources behind Azure API Management with little effort. This allowed us to spillover when we reach the TPM or RPM limit of a resource, or the overall throughput in Azure OpenAI's committed capacity model. Again, big thanks to Andrew Dewes for his original implementation: [andredewes/apim-aoai-smart-loadbalancing](https://github.com/andredewes/apim-aoai-smart-loadbalancing/tree/main)
+In this post, we've demonstrated a straightforward method for bundling multiple Azure OpenAI resources behind Azure API Management. This approach seamlessly facilitates spillover in scenarios where we encounter the TPM or RPM limit of a resource, or when reaching the overall throughput in Azure OpenAI's committed capacity model. Once again, a special acknowledgment to Andrew Dewes for his original implementation: [andredewes/apim-aoai-smart-loadbalancing](https://github.com/andredewes/apim-aoai-smart-loadbalancing/tree/main)
