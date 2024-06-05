@@ -57,7 +57,7 @@ To figure out how tokens are measured, let's run a more sophisticated test with 
 * 100 Input tokens
 * 2000 max_tokens (the generation will stop well before, but we need to "eat" up token quota to hit the limit)
 
-In this case, we calculate the actual token cost that was deducted from our quota by subtracting it from our known quota (10k) or the last reported remaining tokens from the API response. Let's run it for a bit over a minute:
+In this case, we calculate the actual token cost that was deducted from our quota by subtracting it from our known quota (10k) or the last reported remaining tokens from the API response. This means we run single-threaded, no calls in parallel, and wait until each call is done. Let's run it for a bit over a minute:
 
 ```
 Time 0.0s / Model gpt-35-turbo-1106 / HTTP 200 / Remaining tokens: 7939 / Tokens used: 100+73=173 / Actual token cost: 2061
@@ -78,6 +78,8 @@ Time 68.6s / Model gpt-35-turbo-1106 / HTTP 429
 Firstly, we can see that we can get four initial calls through, which was expected. Each call requires 100+2000=2100 tokens in total and we need to stay below 10k tokens per minute. Furthermore we see the remaining tokens decrease until we have less available than our requested payload cost. We also clearly see that the high `max_token` settings removes valuable tokens from our quota, despite the response only being ~75 tokens (as shared in earlier posts, always keep `max_tokens` as low as possible).
 
 In addition, we see that tokens start to get "refilled" exactly 60 seconds after they were consumed. They do not get refilled at once, but rather on a rolling basis (otherwise the first call after the 60 second mark would have had a cost of ~-8400). This means Azure OpenAI uses a rolling window of 60 seconds to manage the TPM quota. As an example, if we right now place a call that uses 5000 tokens, we'd get back 5000 tokens of quota 60 seconds later. This aligns with the documentation ([Understanding rate limits](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest#understanding-rate-limits)), where it is stated that the quota management happens on 10 or 60 seconds windows (depends on the model). This approach makes sense, as it allows for large API calls to pass through.
+
+However, it is unclear to me why the actual token cost is ~2061 and not 2100 and I could not figure out why this is happening. However, it always seems to be below the actual used token amount.
 
 ## Deep dive into `x-ratelimit-remaining-requests`
 
