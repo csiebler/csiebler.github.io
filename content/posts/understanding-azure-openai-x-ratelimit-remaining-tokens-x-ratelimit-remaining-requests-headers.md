@@ -79,6 +79,8 @@ Firstly, we can see that we can get four initial calls through, which was expect
 
 In addition, we see that tokens start to get "refilled" exactly 60 seconds after they were consumed. They do not get refilled at once, but rather on a rolling basis (otherwise the first call after the 60 second mark would have had a cost of ~-8400). This means Azure OpenAI uses a rolling window of 60 seconds to manage the TPM quota. As an example, if we right now place a call that uses 5000 tokens, we'd get back 5000 tokens of quota 60 seconds later. This aligns with the documentation ([Understanding rate limits](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/quota?tabs=rest#understanding-rate-limits)), where it is stated that the quota management happens on 10 or 60 seconds windows (depends on the model). This approach makes sense, as it allows for large API calls to pass through.
 
+![Azure OpenAI's token quota refill logic](/images/aoai_tpm_refill.png "Azure OpenAI's token quota refill logic")
+
 However, it is unclear to me why the actual token cost is ~2061 and not 2100 and I could not figure out why this is happening. However, it always seems to be below the actual used token amount.
 
 ## Deep dive into `x-ratelimit-remaining-requests`
@@ -119,6 +121,13 @@ Time 34.8s / Model gpt-35-turbo-1106 / HTTP 429
 
 This looks very different from what we were expecting after the first test! Only two calls pass through - how can this be? Well, if we look at the full log, it becomes clear: the RPM limit is not enforced on a minute window, but rather on a 10 second window. This means, if we made a call right now, we'd get back a `+1` "call refill" 10 seconds later. This also explains why we only get 1/6th of the full minute quota that the UI and documentation shows us. Initially, this caused a lot of confusion for me personally ("Why can't I push more more calls through!!!"), but made sense once I understood how it works.
 
+![Azure OpenAI's request quota refill logic](/images/aoai_rpm_refill.png "Azure OpenAI's request quota refill logic")
+
 ## Summary
 
-Using the `x-ratelimit-remaining-tokens` and `x-ratelimit-remaining-requests` headers in Azure OpenAI can be a useful tool to estimate how many calls we can still make before e.g., needing to switch to a different model deployment or resource. However, it is crucial to understand on which time-window those metrics operate and how they get "refilled". Otherwise we might interpret them wrongly and wonder why we only get so little API calls through.
+Using the `x-ratelimit-remaining-tokens` and `x-ratelimit-remaining-requests` headers in Azure OpenAI can be a useful tool to estimate how many calls we can still make before e.g., needing to switch to a different model deployment or resource. However, it is crucial to understand on which time-window those metrics operate and how they get "refilled". Hence, in summary:
+
+* Token quota gets refilled 60 seconds after a call has been accepted (by the amount of tokens deducted)
+* Request quota gets refilled 10 seconds after a call has been accepted
+
+With this, it is easy to optimize throughput or run batch jobs more efficiently.
