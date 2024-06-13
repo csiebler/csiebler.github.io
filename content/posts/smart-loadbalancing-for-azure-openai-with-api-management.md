@@ -4,7 +4,7 @@ date: 2023-12-20
 ---
 ## Introduction
 
-*This post was updated on June 13, 2024 to reflect the latest Azure OpenAI updates*
+*This post was updated on June 13, 2024 to reflect the latest Azure OpenAI updates.*
 
 In this post, we will guide you through the process of consolidating various Azure OpenAI resources behind a unified API endpoint using Azure API Management (APIM). While there have been numerous discussions on this topic previously, this article focuses on a more sophisticated approach. This method enables us to address the following use cases:
 
