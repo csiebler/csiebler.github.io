@@ -13,6 +13,14 @@ Speaking in front of small and large audiences has been my passion for many year
 
 ## Past events
 
+### Microsoft Envision AI Connection DACH - Munich, Germany (March 2024)
+
+* Innovativ sein mit Generative AI: Ein Praxisleitfaden zur Umsetzung - mit Deutsche Telekom
+
+### Big-Data.AI Summit 2023 - Berlin, Germany (October 2023)
+
+* Scaling Generative AI to All Employees and beyond ([YouTube](https://www.youtube.com/watch?v=Bst9iHeE5W0))
+
 ### Medientage München #MTM22 – Munich, Germany (October 2022)
 
 * Synthetische Stimmen bei ntv​ - Sprachtechnologie als strategisches Instrument für Reichweiten- und Produktentwicklung​ (together with [Tatjana Anisimov](https://www.linkedin.com/in/tatjana-anisimov-3998ab10a/))
