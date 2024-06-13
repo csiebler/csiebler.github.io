@@ -4,6 +4,8 @@ date: 2023-12-20
 ---
 ## Introduction
 
+*This post was updated on June 13, 2024 to reflect the latest Azure OpenAI updates*
+
 In this post, we will guide you through the process of consolidating various Azure OpenAI resources behind a unified API endpoint using Azure API Management (APIM). While there have been numerous discussions on this topic previously, this article focuses on a more sophisticated approach. This method enables us to address the following use cases:
 
 1. Aggregating multiple Azure OpenAI resources, potentially across various regions, with a preference for prioritizing in-region resources.
@@ -11,7 +13,7 @@ In this post, we will guide you through the process of consolidating various Azu
 1. A combination of both scenarios.
 
 
-My colleague, Andrew Dewes, originated this idea and its implementation. You can find all the code from this post under: [andredewes/apim-aoai-smart-loadbalancing](https://github.com/andredewes/apim-aoai-smart-loadbalancing/tree/main).
+The original idea comes from my colleague, Andrew Dewes, and his initial implementation. You can find the latest code from him and a few others under: [Azure-Samples/openai-apim-lb](https://github.com/Azure-Samples/openai-apim-lb/).
 
 To recap, in Azure OpenAI you have the following throughput constraints:
 
@@ -70,7 +72,7 @@ Click Next, select `Managed Identity` under `Assign access to`, then `+ Select M
 
 ### Import API schema into API Management
 
-Next, we need to add Azure OpenAI's API schema into our APIM instance. For this, download the desired API schema for Azure OpenAI Service for the [schema repo](https://github.com/Azure/azure-rest-api-specs/tree/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview). In this post, we'll be using version [`2023-12-01-preview`](https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview/2023-12-01-preview/inference.json).
+Next, we need to add Azure OpenAI's API schema into our APIM instance. For this, download the desired API schema for Azure OpenAI Service for the [schema repo](https://github.com/Azure/azure-rest-api-specs/tree/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview). In this post, we'll be using version [`2024-05-01-preview`](https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview/2024-05-01-preview/inference.json).
 
 Once downloaded, open `inference.json` in the editor of your choice and update the `servers` section:
 ```json
@@ -102,7 +104,7 @@ Also validate that `API URL suffix` is set to `openai`:
 
 ![Validate that API Url suffix](/images/validate_api_url_suffix.png "Validate that API Url suffix is set to openai")
 
-Now, download the [`apim-policy.xml`](https://raw.githubusercontent.com/andredewes/apim-aoai-smart-loadbalancing/main/apim-policy.xml) from [andredewes/apim-aoai-smart-loadbalancing](https://github.com/andredewes/apim-aoai-smart-loadbalancing/tree/main) and edit edit the backends section as needed:
+Now, download the [`apim-policy.xml`](https://raw.githubusercontent.com/Azure-Samples/openai-apim-lb/main/apim-policy.xml) from [Azure-Samples/openai-apim-lb](https://github.com/Azure-Samples/openai-apim-lb/) and edit the backends section as needed:
 
 ```csharp
 backends.Add(new JObject()
@@ -146,7 +148,7 @@ from openai import AzureOpenAI
 client = AzureOpenAI(
     azure_endpoint="https://<your APIM endpoint>.azure-api.net/",
     api_key="<your APIM subscription key>",
-    api_version="2023-12-01-preview"
+    api_version="2024-05-01-preview"
 )
 
 response = client.chat.completions.create(
