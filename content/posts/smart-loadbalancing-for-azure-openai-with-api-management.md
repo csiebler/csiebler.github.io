@@ -13,7 +13,7 @@ In this post, we will guide you through the process of consolidating various Azu
 1. A combination of both scenarios.
 
 
-The original idea comes from my colleague, Andrew Dewes, and his initial implementation. You can find the latest code from him and a few others under: [Azure-Samples/openai-apim-lb](https://github.com/Azure-Samples/openai-apim-lb/).
+The original idea comes from my colleague, Andre Dewes, and his initial implementation. You can find the latest code from him and a few others under: [Azure-Samples/openai-apim-lb](https://github.com/Azure-Samples/openai-apim-lb/).
 
 To recap, in Azure OpenAI you have the following throughput constraints:
 
