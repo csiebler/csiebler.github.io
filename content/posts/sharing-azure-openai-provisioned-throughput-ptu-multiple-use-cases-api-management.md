@@ -1,5 +1,5 @@
 ---
-title: "Sharing Azure OpenAI Provisioned Throughput for multiple use cases with Azure API Management"
+title: "Sharing Azure OpenAI Provisioned Throughput (PTU) for multiple use cases with Azure API Management"
 date: 2024-06-25
 ---
 ## Introduction
