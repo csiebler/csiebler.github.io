@@ -8,7 +8,7 @@ In this post we'll discuss how we can use Azure API Management (APIM) to host mu
 
 Hosting multiple versions can be useful when we deploy APIM as a smart load balancer to route requests between Provisioned Throughput (PTU) and/or multiple PAYGO endpoints. This post builds upon the learnings shared in [Smart Load-Balancing for Azure OpenAI with Azure API Management](https://clemenssiebler.com/posts/smart-loadbalancing-for-azure-openai-with-api-management/).
 
-## Scenarios
+## Solutions
 
 To support more than one API version of Azure OpenAI in APIM we can choose between two options:
 
@@ -76,13 +76,13 @@ ChatCompletion(id='chatcmpl-......', choices=[Choice(finish_reason='stop', index
 
 We can also try out different API version and they all should work fine - as long as they exist obviously.
 
-### Strongly-typed
+### Strongly-defined API versions
 
 In this scenario, we're taking the Azure OpenAI Specs from [Azure/azure-rest-api-specs](https://github.com/Azure/azure-rest-api-specs/tree/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference) and properly version them within APIM. This is similar to what has been discussed in [Smart Load-Balancing for Azure OpenAI with Azure API Management](https://clemenssiebler.com/posts/smart-loadbalancing-for-azure-openai-with-api-management/), except here we'll be hosting multiple versions.
 
 This has the following advantages:
 
-* Strongly typed and full control over which versions we want to expose to developers
+* Strongly-defined and full control over which versions we want to expose to developers
 * APIM Developer Portal will be supported and will give all the details about the API operations
 
 But it also comes with some disadvantages:
