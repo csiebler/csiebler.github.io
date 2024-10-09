@@ -19,11 +19,11 @@ Managed Online Endpoints in Azure Machine Learning provide a streamlined and sca
 
 ## HuggingFace Model Deployment
 
-In this section, we'll go through deploying a HuggingFace model on Azure Machine Learning's Managed Online Endpoints. We'll use a custom Dockerfile and configuration files to set up the deployment.
+Let's go through deploying a HuggingFace model on Azure Machine Learning's Managed Online Endpoints. For this, we'll use a custom Dockerfile and configuration files to set up the deployment. As a model, we'll be using [meta-llama/Llama-3.2-11B-Vision](https://huggingface.co/meta-llama/Llama-3.2-11B-Vision) on a single `Standard_NC24ads_A100_v4` instance.
 
 ### Step 1: Create a custom Environment for vLLM on AzureML
 
-First, we create a Dockerfile to define the environment for our model:
+First, we create a `Dockerfile` to define the environment for our model. For this, we'll be using vllm's base container that has all the dependencies and drivers included:
 
 ```dockerfile
 FROM vllm/vllm-openai:latest
@@ -31,16 +31,16 @@ ENV MODEL_NAME facebook/opt-125m
 ENTRYPOINT python3 -m vllm.entrypoints.openai.api_server --model $MODEL_NAME $VLLM_ARGS
 ```
 
-The idea here is that we can pass a model name via an ENV variable, so that we can easily define during deployment time which model we want to deploy.
+The idea here is that we can pass a model name via an ENV variable, so that we can easily define which model we want to deploy during deployment time.
 
-Then log into your Azure Machine Learning workspace:
+Next, we log into our Azure Machine Learning workspace:
 
 ```cli
 az account set --subscription <subscription ID>
 az configure --defaults workspace=<Azure Machine Learning workspace name> group=<resource group>
 ```
 
-Next, we create an environment.yml file to specify the environment settings:
+Now, we create an `environment.yml` file to specify the environment settings:
 
 ```yaml
 $schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
@@ -58,7 +58,7 @@ az ml environment create -f environment.yml
 
 ### Step 2: Deploy the AzureML Managed Online Endpoint
 
-We then create an endpoint.yml file to define the Managed Online Endpoint:
+Time for deployment, so let's first create an `endpoint.yml` file to define the Managed Online Endpoint:
 
 ```yaml
 $schema: https://azuremlsdk2.blob.core.windows.net/latest/managedOnlineEndpoint.schema.json
@@ -66,13 +66,13 @@ name: vllm-hf
 auth_mode: key
 ```
 
-Then, let's create it:
+Let's create it:
 
 ```cli
 az ml online-endpoint create -f endpoint.yml
 ```
 
-For the next step, we'll need the Docker image address, which we can quickly get from AzureML Studio -> Environments -> vllm:
+For the next step, we'll need the address of the Docker image address we created. We can quickly get it from AzureML Studio -> Environments -> vllm:
 
 ![Docker Image address](/images/vllm_docker_image_link.png "Docker Image address")
 
@@ -118,7 +118,7 @@ readiness_probe:
   failure_threshold: 30
 ```
 
-The `request_settings` depends a bit on your instance type/size and might require some manual tuning to get the model properly and efficiently. Since vLLM does not support separate probes for readiness and liveness, we'll need to make sure that the model has fully loaded, before the fire the first probes. This is why we increased `readiness_probe.initial_delay` to 120s. For larger models, we should also follow [vLLMs documentation](https://docs.vllm.ai/en/v0.6.1/serving/distributed_serving.html) for using tensor parallel inference (model on single node but spanning multiple GPUs) by adding `--tensor-parallel-size <NUM_OF_GPUs>` to `VLLM_ARGS`. Since we're using a single A100 GPU in our example (`Standard_NC24ads_A100_v4`), this is not require though.
+The `request_settings` depends a bit on your instance type/size and might require some manual tuning to get the model run properly and efficiently. Since vLLM does not support separate probes for readiness and liveness, we'll need to make sure that the model has fully loaded before the fire the first probes. This is why we increased `readiness_probe.initial_delay` to 120s. For larger models, we should also follow [vLLM's documentation](https://docs.vllm.ai/en/v0.6.1/serving/distributed_serving.html) for using tensor parallel inference (model on single node but spanning multiple GPUs) by adding `--tensor-parallel-size <NUM_OF_GPUs>` to `VLLM_ARGS`. Since we're using a single A100 GPU in our example (`Standard_NC24ads_A100_v4`), this is not required though.
 
 Lastly, we can deploy the model:
 
@@ -126,7 +126,7 @@ Lastly, we can deploy the model:
 az ml online-deployment create -f deployment.yml --all-traffic
 ```
 
-By following these steps, we can deploy a HuggingFace model on Azure Machine Learning’s Managed Online Endpoints, ensuring efficient and scalable real-time inference. Time to test it!
+By following these steps, we have deployed a HuggingFace model on Azure Machine Learning’s Managed Online Endpoints, ensuring efficient and scalable real-time inference. Time to test it!
 
 ### Step 3: Testing the deployment
 
@@ -163,22 +163,24 @@ print(response.json())
 {'id': 'cmpl-74bd153fff5740b3ac070e324f99494c', 'object': 'text_completion', 'created': 1728460457, 'model': 'meta-llama/Llama-3.2-11B-Vision', 'choices': [{'index': 0, 'text': " top tourist destination known for its iconic landmarks, vibrant neighborhoods, and cultural attractions. Whether you're interested in history, art, music, or food, there's something for everyone in this amazing city. Here are some of the top things to do in San Francisco:...,", 'logprobs': None, 'finish_reason': 'length', 'stop_reason': None, 'prompt_logprobs': None}], 'usage': {'prompt_tokens': 5, 'total_tokens': 205, 'completion_tokens': 200}}
 ```
 
+Works!
+
 ## Custom Model Deployment
 
-Let's say you fine-tuned or even trained your own LLM. How can we use vLLM to deploy it? There are two options:
+So let's shift gears and deploy our own fine-tuned or even pre-trained model. How can we use vLLM to deploy this? In short, there are two options:
 
-1. Upload the model to HuggingFace and follow the steps above
-1. Keep the model fully private
+1. Upload the model to HuggingFace and follow the deployment steps from above or
+1. Keep the model fully private and still deploy it
 
-In this section, we'll go through the second route. In this case we'll perform the following steps:
+In this section, we'll discuss the second route and we'll perform the following steps:
 
-1. Register custom model in Azure Machine Learning's Model Registry
+1. Register our custom model in Azure Machine Learning's Model Registry
 1. Create a custom vLLM container that supports local model loading
 1. Deploy the model to Managed Online Endpoints
 
 ### Step 1: Create a custom Environment for vLLM on AzureML
 
-First create a custom vLLM container that takes a `MODEL_PATH` as input. This path will be used by AzureML to mount our custom model.
+First, let's create a custom vLLM `Dockerfile` that takes a `MODEL_PATH` as input. This path will be used by AzureML to mount our custom model.
 
 ```dockerfile
 FROM vllm/vllm-openai:latest
@@ -186,14 +188,14 @@ ENV MODEL_PATH "/model/opt-125m"
 ENTRYPOINT python3 -m vllm.entrypoints.openai.api_server --model $MODEL_PATH $VLLM_ARGS
 ```
 
-Then log into your Azure Machine Learning workspace:
+Then, let's log into our Azure Machine Learning workspace:
 
 ```cli
 az account set --subscription <subscription ID>
 az configure --defaults workspace=<Azure Machine Learning workspace name> group=<resource group>
 ```
 
-Next, we create an environment.yml file to specify the environment settings:
+Next, we create an `environment.yml` file to specify the environment settings:
 
 ```yaml
 $schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
@@ -211,7 +213,7 @@ az ml environment create -f environment.yml
 
 ### Step 2: Register custom model in Model Registry
 
-Firstly, we need to register our new model. For this, goto AzureML Studio, select Models, then select Register. Then, register a model of `Unspecified type` and reference the whole folder:
+Before we continue, we need to register our model. For this, we can go to AzureML Studio, select Models, then select Register. There, we can register our model as `Unspecified type` and reference the whole folder:
 
 ![Upload model folder](/images/upload_model.png "Upload model folder")
 
@@ -227,7 +229,7 @@ The folder name will later determine the model's name during inference API calls
 
 ### Step 3: Deploy the AzureML Managed Online Endpoint
 
-We then create an endpoint.yml file to define the Managed Online Endpoint:
+It's deployment time! First, we create our `endpoint.yml` file to define the Managed Online Endpoint:
 
 ```yaml
 $schema: https://azuremlsdk2.blob.core.windows.net/latest/managedOnlineEndpoint.schema.json
@@ -235,7 +237,7 @@ name: vllm-hf
 auth_mode: key
 ```
 
-Then, let's create it:
+Then, we create it:
 
 ```cli
 az ml online-endpoint create -f endpoint.yml
