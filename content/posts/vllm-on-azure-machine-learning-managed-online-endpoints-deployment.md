@@ -5,17 +5,17 @@ date: 2024-10-09
 
 ### Introduction
 
-In this post, we explain how to deploy LLMs on vLLM using Azure Machine Learning's Managed Online Endpoints for efficient, scalable, and secure real-time inference. To get started, let's briefly look into what vLLM and Managed Online Endpoints are.
+In this post, we'll explain how to deploy LLMs on vLLM using Azure Machine Learning's Managed Online Endpoints for efficient, scalable, and secure real-time inference. To get started, let's briefly look into what vLLM and Managed Online Endpoints are.
 
-## Introduction to vLLM
+# Introduction to vLLM
 
 [vLLM](https://github.com/vllm-project/vllm) is a high-throughput and memory-efficient inference and serving engine designed for large language models (LLMs). It optimizes the serving and execution of LLMs by utilizing advanced memory management techniques, such as PagedAttention, which efficiently manages attention key and value memory. This allows for continuous batching of incoming requests and fast model execution, making vLLM a powerful tool for deploying and serving LLMs at scale.
 
 vLLM supports seamless integration with popular Hugging Face models and offers various decoding algorithms, including parallel sampling and beam search. It also supports tensor parallelism and pipeline parallelism for distributed inference, making it a flexible and easy-to-use solution for LLM inference (see [full docs](https://docs.vllm.ai/en/latest/)).
 
-## Managed Online Endpoints in Azure Machine Learning
+# Managed Online Endpoints in Azure Machine Learning
 
-Managed Online Endpoints in Azure Machine Learning provide a streamlined and scalable way to deploy machine learning models for real-time inference. These endpoints handle the complexities of serving, scaling, securing, and monitoring models, allowing you to focus on building and improving your models without worrying about infrastructure management.
+Managed Online Endpoints in Azure Machine Learning provide a streamlined and scalable way to deploy machine learning models for real-time inference. These endpoints handle the complexities of serving, scaling, securing, and monitoring models, allowing us to focus on building and improving your models without worrying about infrastructure management.
 
 ## HuggingFace Model Deployment
 
@@ -160,7 +160,8 @@ print(response.json())
 
 ```json
 {'object': 'error', 'message': 'As of transformers v4.44, default chat template is no longer allowed, so you must provide a chat template if the tokenizer does not define one.', 'type': 'BadRequestError', 'param': None, 'code': 400}
-{'id': 'cmpl-74bd153fff5740b3ac070e324f99494c', 'object': 'text_completion', 'created': 1728460457, 'model': 'meta-llama/Llama-3.2-11B-Vision', 'choices': [{'index': 0, 'text': " top tourist destination known for its iconic landmarks, vibrant neighborhoods, and cultural attractions. Whether you're interested in history, art, music, or food, there's something for everyone in this amazing city. Here are some of the top things to do in San Francisco:...,", 'logprobs': None, 'finish_reason': 'length', 'stop_reason': None, 'prompt_logprobs': None}], 'usage': {'prompt_tokens': 5, 'total_tokens': 205, 'completion_tokens': 200}}```
+{'id': 'cmpl-74bd153fff5740b3ac070e324f99494c', 'object': 'text_completion', 'created': 1728460457, 'model': 'meta-llama/Llama-3.2-11B-Vision', 'choices': [{'index': 0, 'text': " top tourist destination known for its iconic landmarks, vibrant neighborhoods, and cultural attractions. Whether you're interested in history, art, music, or food, there's something for everyone in this amazing city. Here are some of the top things to do in San Francisco:...,", 'logprobs': None, 'finish_reason': 'length', 'stop_reason': None, 'prompt_logprobs': None}], 'usage': {'prompt_tokens': 5, 'total_tokens': 205, 'completion_tokens': 200}}
+```
 
 ## Custom Model Deployment
 
@@ -325,7 +326,8 @@ print(response.json())
 ```
 
 ```json
-{'id': 'cmpl-50b8b30f820b418689576bc23ece3d16', 'object': 'text_completion', 'created': 1728471381, 'model': '/models/demo-model-125m', 'choices': [{'index': 0, 'text': " great place to live.\nI've heard of San Francisco, but I've never been.", 'logprobs': None, 'finish_reason': 'stop', 'stop_reason': None, 'prompt_logprobs': None}], 'usage': {'prompt_tokens': 5, 'total_tokens': 25, 'completion_tokens': 20}}```
+{'id': 'cmpl-50b8b30f820b418689576bc23ece3d16', 'object': 'text_completion', 'created': 1728471381, 'model': '/models/demo-model-125m', 'choices': [{'index': 0, 'text': " great place to live.\nI've heard of San Francisco, but I've never been.", 'logprobs': None, 'finish_reason': 'stop', 'stop_reason': None, 'prompt_logprobs': None}], 'usage': {'prompt_tokens': 5, 'total_tokens': 25, 'completion_tokens': 20}}
+```
 
 ## Autoscaling our vLLM endpoint
 
