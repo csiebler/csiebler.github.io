@@ -158,7 +158,6 @@ print(response.json())
 ```
 
 ```json
-{'object': 'error', 'message': 'As of transformers v4.44, default chat template is no longer allowed, so you must provide a chat template if the tokenizer does not define one.', 'type': 'BadRequestError', 'param': None, 'code': 400}
 {'id': 'cmpl-74bd153fff5740b3ac070e324f99494c', 'object': 'text_completion', 'created': 1728460457, 'model': 'meta-llama/Llama-3.2-11B-Vision', 'choices': [{'index': 0, 'text': " top tourist destination known for its iconic landmarks, vibrant neighborhoods, and cultural attractions. Whether you're interested in history, art, music, or food, there's something for everyone in this amazing city. Here are some of the top things to do in San Francisco:...,", 'logprobs': None, 'finish_reason': 'length', 'stop_reason': None, 'prompt_logprobs': None}], 'usage': {'prompt_tokens': 5, 'total_tokens': 205, 'completion_tokens': 200}}
 ```
 
