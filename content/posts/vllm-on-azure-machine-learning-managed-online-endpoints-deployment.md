@@ -7,6 +7,8 @@ date: 2024-10-09
 
 In this post, we'll explain how to deploy LLMs on vLLM using Azure Machine Learning's Managed Online Endpoints for efficient, scalable, and secure real-time inference. To get started, let's briefly look into what vLLM and Managed Online Endpoints are.
 
+You can find the full code examples on [csiebler/vllm-on-azure-machine-learning](https://github.com/csiebler/vllm-on-azure-machine-learning).
+
 # Introduction to vLLM
 
 [vLLM](https://github.com/vllm-project/vllm) is a high-throughput and memory-efficient inference and serving engine designed for large language models (LLMs). It optimizes the serving and execution of LLMs by utilizing advanced memory management techniques, such as PagedAttention, which efficiently manages attention key and value memory. This allows for continuous batching of incoming requests and fast model execution, making vLLM a powerful tool for deploying and serving LLMs at scale.
