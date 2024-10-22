@@ -133,7 +133,7 @@ By following these steps, we have deployed a HuggingFace model on Azure Machine 
 
 ### Step 3: Testing the deployment
 
-First, let's get the endpoints scoring uri and the api keys:
+First, let's get the endpoint's scoring uri and the api keys:
 
 ```cli
 az ml online-endpoint show -n vllm-hf
