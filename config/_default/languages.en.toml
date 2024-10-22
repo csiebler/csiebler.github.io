@@ -12,7 +12,7 @@ title = "Clemens Siebler's Blog"
 
 dateFormat = "2 January 2006"
 
-[author]
+[params.authors]
   name = "Clemens Siebler"
   image = "images/clemens.jpeg"
   # headline = "I'm only human"
