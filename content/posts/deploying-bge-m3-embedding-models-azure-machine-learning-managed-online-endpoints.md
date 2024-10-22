@@ -11,9 +11,9 @@ In this post, we'll explain how to deploy an embedding model like [BGE-M3](https
 
 Managed Online Endpoints in Azure Machine Learning provide a streamlined and scalable way to deploy machine learning models for real-time inference. These endpoints handle the complexities of serving, scaling, securing, and monitoring models, allowing us to focus on building and improving your models without worrying about infrastructure management.
 
-## Deployment Steps
+# Deployment Steps
 
-### Authoring our scoring script for inference
+## Authoring our scoring script for inference
 
 Firstly, let's write a short `score.py` script that we'll run on our inference server on Managed Online Endpoints:
 
@@ -60,7 +60,7 @@ dependencies:
     - peft
 ```
 
-### Managed Online Endpoint deployment steps
+## Managed Online Endpoint deployment steps
 
 Time to get started with our deployment, so let's log into our Azure Machine Learning workspace:
 
@@ -113,7 +113,7 @@ This will:
 * Automatically bake the conda environment into the `azureml/openmpi4.1.0-cuda11.8-cudnn8-ubuntu22.04:latest` base image
 * Deploy the newly created image to an managed `Standard_NC4as_T4_v3` instance with our `score.py` script inside of it
 
-### Testing the deployment
+## Testing the deployment
 
 So let's test the endpoint. First, we'll need to get the endpoint's scoring uri and the API keys:
 
@@ -165,10 +165,10 @@ Once we run this sustained for a few minutes, we can see the following curve in 
 
 Not fully utilized, but we're getting close to a 100% GPU utilization. From here, we can tune our endpoint for more throughput.
 
-## Autoscaling our vLLM endpoint
+# Autoscaling our embedding endpoint
 
 Autoscaling Managed Online Endpoint deployments in Azure Machine Learning allows us to dynamically adjust the number of instances allocated to our endpoints based on real-time metrics and schedules. This ensures that our application can handle varying loads efficiently without manual intervention. By integrating with Azure Monitor, you can set up rules to scale out when the CPU or GPU utilization exceeds a certain threshold or scale in during off-peak hours. For detailed guidance on configuring autoscaling, you can refer to the [official documentation](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-autoscale-endpoints?view=azureml-api-2&tabs=cli).
 
-## Summary
+# Summary
 
 In this post, we've discussed how to deploy embedding models like BGE-M3 using Azure Machine Learning's Managed Online Endpoints for efficient real-time inference. The guide outlined the steps for creating the required `score.py` and `conda.yml` assets, then defining the endpoint, and deploying our model using Azure CLI commands. We also looked at examples for testing the deployed model.

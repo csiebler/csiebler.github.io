@@ -3,7 +3,7 @@ title: "Deploying vLLM models on Azure Machine Learning with Managed Online Endp
 date: 2024-10-09
 ---
 
-### Introduction
+# Introduction
 
 In this post, we'll explain how to deploy LLMs on vLLM using Azure Machine Learning's Managed Online Endpoints for efficient, scalable, and secure real-time inference. To get started, let's briefly look into what vLLM and Managed Online Endpoints are.
 
