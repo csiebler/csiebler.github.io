@@ -134,11 +134,6 @@ Looking at this data, we can derive our first insight:
 
 Now let's break it down by cost per 1000 words:
 
-* **English:** $2.03 per 1000 words synthesized
-* **French:** $1.83 per 1000 words synthesized
-* **German:** $2.29 per 1000 words synthesized
-* **Spanish:** $2.01 per 1000 words synthesized
-
 * **English:** $0.81 per 1000 words synthesized
 * **French:** $0.73 per 1000 words synthesized
 * **German:** $0.91 per 1000 words synthesized
