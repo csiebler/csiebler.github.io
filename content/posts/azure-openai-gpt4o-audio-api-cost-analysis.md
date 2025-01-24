@@ -69,6 +69,13 @@ We can find the pricing for `GPT-4o-Audio-Preview-Global` on the [Azure OpenAI p
 | Text | $2.50 | $10 |
 | Audio | $100 | $200 |
 
+**Edit:** It looks like the Azure pricing website hasn't been updated to OpenAI's pricing for `2024-12-17`, which Microsoft matches:
+
+| Type   | Input Price (per 1M Tokens) | Output Price (per 1M Tokens) |
+|--------|-----------------------------|------------------------------|
+| Text | $2.50 | $10 |
+| Audio | $40 | $80 |
+
 So for our example above, we consumed:
 
 **Input tokens:**
@@ -78,9 +85,9 @@ So for our example above, we consumed:
 **Output tokens:**
 
 * `text_tokens`: 107 --> `$10/1M * 107` = $0.00107
-* `audio_tokens`: 589 --> `$200/1M * 589` = $0.1178
+* `audio_tokens`: 589 --> `$80/1M * 589` = $0.04712
 
-**Total:** $0.11909
+**Total:** $0.04841
 
 Let's do this programmatically and also include the length of the audio:
 
@@ -92,7 +99,7 @@ with wave.open("test.wav", "rb") as f:
     
 cost_text_input = completion.usage.prompt_tokens_details.text_tokens * 2.5/1_000_000
 cost_text_output = completion.usage.completion_tokens_details.text_tokens * 10/1_000_000
-cost_audio_output = completion.usage.completion_tokens_details.audio_tokens * 200/1_000_000
+cost_audio_output = completion.usage.completion_tokens_details.audio_tokens * 80/1_000_000
 
 cost_total = cost_text_input + cost_text_output + cost_audio_output
 cost_per_hour = cost_total / audio_length_in_seconds * 3600
@@ -102,11 +109,11 @@ print(f"This equates to ${cost_per_hour} per hour of audio")
 ```
 
 ```
-Cost for generating 29.45 seconds audio file was $0.11909
-This equates to $14.557691001697794 per hour of audio
+Cost for generating 29.45 seconds audio file was $0.04841
+This equates to $5.9176910017 per hour of audio
 ```
 
-So this means for synthesizing audio, we're looking at $14 to $15 per hour. But okay, this was just a small example, so let's run some experiments, scale it and evaluate across a few more languages.
+So this means for synthesizing audio, we're looking at roughly $6 per hour. But okay, this was just a small example, so let's run some experiments, scale it and evaluate across a few more languages.
 
 ## Cost per hour across different languages
 
@@ -114,16 +121,16 @@ The question we want to answer is: even though we pay for audio tokens, does thi
 
 So for sake of testing, we'll use English, German, French, Spanish. For this, I've created 10 random news articles with `gpt4o-mini` and used the first 200 tokens of each article for audio input synthesis, then calculated the average cost. The results are as follows:
 
-* **English:** $14.55 per hour of audio
-* **French:** $14.58 per hour of audio
-* **German:** $14.56 per hour of audio
-* **Spanish:** $14.56 per hour of audio
+* **English:** $5.82 per hour of audio
+* **French:** $5.83 per hour of audio
+* **German:** $5.82 per hour of audio
+* **Spanish:** $5.82 per hour of audio
 
 (I'm not including the variance, as it has been very low)
 
 Looking at this data, we can derive our first insight:
 
-**Learning #1:** 1h our generated audio costs around $14.58. This is more or less independent of the language.
+**Learning #1:** 1h our generated audio costs around $5.82. This is more or less independent of the language.
 
 Now let's break it down by cost per 1000 words:
 
@@ -132,7 +139,12 @@ Now let's break it down by cost per 1000 words:
 * **German:** $2.29 per 1000 words synthesized
 * **Spanish:** $2.01 per 1000 words synthesized
 
-Just as gpt4o requires different token amounts to process different languages (in some cases 1.5x or even more), gpt4o-audio also results in different costs per word when generating audio. This was expected, as for example German has fairly long words compared to English, thus generating more seconds, which should equate more audio tokens. However, it is surprising to see that the differences are less than ~10% on average, with an average of roughly $2 per 1000 words.
+* **English:** $0.81 per 1000 words synthesized
+* **French:** $0.73 per 1000 words synthesized
+* **German:** $0.91 per 1000 words synthesized
+* **Spanish:** $0.80 per 1000 words synthesized
+
+Just as gpt4o requires different token amounts to process different languages (in some cases 1.5x or even more), gpt4o-audio also results in different costs per word when generating audio. This was expected, as for example German has fairly long words compared to English, thus generating more seconds, which should equate more audio tokens. However, it is surprising to see that the differences are less than ~10% on average, with an average of roughly $0.82 per 1000 words.
 
 **Learning #2:** Cost per word varies depending on the language, but it is not as drastic as expected.
 
@@ -140,4 +152,4 @@ Now to be fair, this test was at fairly small scale and did not include non-West
 
 ## Summary
 
-In this post, we've explored the cost implications of using the GPT-4o-Audio-Preview API, highlighting how it processes both text and audio tokens. By analyzing a small example and scaling across different languages, we found that generating one hour of audio costs approximately $14.58, regardless of the language. In summary, the cost per 1,000 words synthesized can vary depending on the language, due to differences in token requirements and word lengths. However, on average the cost per 1000 words sits at  around $2. This insight provides a clear understanding of the API's pricing, making it easier for developers and business to plan its integration into their projects.
+In this post, we've explored the cost implications of using the GPT-4o-Audio-Preview API, highlighting how it processes both text and audio tokens. By analyzing a small example and scaling across different languages, we found that generating one hour of audio costs approximately $5.82, regardless of the language. In summary, the cost per 1,000 words synthesized can vary depending on the language, due to differences in token requirements and word lengths. However, on average the cost per 1000 words sits at  around $0.82. This insight provides a clear understanding of the API's pricing, making it easier for developers and business to plan its integration into their projects.
