@@ -113,7 +113,7 @@ Cost for generating 29.45 seconds audio file was $0.04841
 This equates to $5.9176910017 per hour of audio
 ```
 
-So this means for synthesizing audio, we're looking at roughly $6 per hour. But okay, this was just a small example, so let's run some experiments, scale it and evaluate across a few more languages.
+So this means for **synthesizing audio, we're looking at roughly $6 per hour**. But okay, this was just a small example, so let's run some experiments, scale it and evaluate across a few more languages.
 
 ## Cost per hour across different languages
 
@@ -130,7 +130,7 @@ So for sake of testing, we'll use English, German, French, Spanish. For this, I'
 
 Looking at this data, we can derive our first insight:
 
-**Learning #1:** 1h our generated audio costs around $5.82. This is more or less independent of the language.
+**Learning #1:** 1h of generated audio costs around $5.82. This is more or less independent of the language.
 
 Now let's break it down by cost per 1000 words:
 
@@ -147,4 +147,4 @@ Now to be fair, this test was at fairly small scale and did not include non-West
 
 ## Summary
 
-In this post, we've explored the cost implications of using the GPT-4o-Audio-Preview API, highlighting how it processes both text and audio tokens. By analyzing a small example and scaling across different languages, we found that generating one hour of audio costs approximately $5.82, regardless of the language. In summary, the cost per 1,000 words synthesized can vary depending on the language, due to differences in token requirements and word lengths. However, on average the cost per 1000 words sits at  around $0.82. This insight provides a clear understanding of the API's pricing, making it easier for developers and business to plan its integration into their projects.
+In this post, we've explored the cost implications of using the GPT-4o-Audio-Preview API, highlighting how it processes both text and audio tokens. By analyzing a small example and scaling across different languages, we found that **generating one hour of audio costs approximately $5.82**, regardless of the language. In summary, the cost per 1,000 words synthesized can vary depending on the language, due to differences in token requirements and word lengths. However, **on average the cost per 1000 words sits at  around $0.82**. This insight provides a clear understanding of the API's pricing, making it easier for developers and business to plan its integration into their projects.
