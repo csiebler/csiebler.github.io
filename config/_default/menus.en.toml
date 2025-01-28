@@ -35,9 +35,18 @@
     target = "_blank"
 
 [[main]]
+  name = "LinkedIn"
+  url = "https://www.linkedin.com/in/csiebler/"
+  weight = 31
+  [main.params]
+    icon = "linkedin"
+    showName = false
+    target = "_blank"
+
+[[main]]
   name = "RSS"
   url = "https://clemenssiebler.com/posts/index.xml"
-  weight = 41
+  weight = 32
   [main.params]
     icon = "rss"
     showName = false
