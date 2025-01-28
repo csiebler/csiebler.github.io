@@ -59,7 +59,7 @@ az configure --defaults workspace=&lt;Azure Machine Learning workspace name&gt; 
 az ml online-endpoint get-credentials -n r1-prod
 </code></pre><p>For completion models, we can then call the endpoint using this Python code snippet:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>requests</span>
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=n>url</span> <span class=o>=</span> <span class=s2>&#34;https://r1-prod.polandcentral.inference.ml.azure.com/v1/completions&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>url</span> <span class=o>=</span> <span class=s2>&#34;https://r1-prod.polandcentral.inference.ml.azure.com/v1/chat/completions&#34;</span>
 </span></span><span class=line><span class=cl><span class=n>headers</span> <span class=o>=</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=s2>&#34;Content-Type&#34;</span><span class=p>:</span> <span class=s2>&#34;application/json&#34;</span><span class=p>,</span>
 </span></span><span class=line><span class=cl>    <span class=s2>&#34;Authorization&#34;</span><span class=p>:</span> <span class=s2>&#34;Bearer xxxxxxxxxxxx&#34;</span>
