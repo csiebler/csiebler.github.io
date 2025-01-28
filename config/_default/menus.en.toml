@@ -25,6 +25,24 @@
   pageRef = "about"
   weight = 20
 
+[[main]]
+  name = "GitHub"
+  url = "https://github.com/csiebler"
+  weight = 30
+  [main.params]
+    icon = "github"
+    showName = false
+    target = "_blank"
+
+[[main]]
+  name = "RSS"
+  url = "https://clemenssiebler.com/posts/index.xml"
+  weight = 41
+  [main.params]
+    icon = "rss.svg"
+    showName = false
+    target = "_blank"
+
 # -- Footer Menu --
 # The footer menu is displayed at the bottom of the page, just before
 # the copyright notice. Configure as per the main menu above.
