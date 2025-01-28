@@ -229,20 +229,73 @@ headers = {
 }
 data = {
     "model": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
-		"messages": [
-      {
-        "role": "user",
-        "content": "What is the capital of France?"
-      },
-    ]
+    "messages": [
+        {
+            "role": "user",
+            "content": "What is better, summer or winter?"
+        },
+    ],
+    'max_tokens': 750,
 }
 
 response = requests.post(url, headers=headers, json=data)
 print(response.json())
 ```
 
-```json
+Answer looks good, we can see the `<think>` tags where the model does its reasoning:
 
+```json
+{
+   "id":"chatcmpl-ccf51218-30a0-4200-bfa4-5d90ac1fdd98",
+   "object":"chat.completion",
+   "created":1738058980,
+   "model":"deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+   "choices":[
+      {
+         "index":0,
+         "message":{
+            "role":"assistant",
+            "content":"<think>\nHmm, the user is asking whether summer or winter is better. I need to consider various aspects to make the answer... that both seasons have their pros and cons, and it's about what you value more.\n</think>\n\nThe debate between summer and winter is subjective and depends on personal preferences. Here's a breakdown of each season's characteristics:\n\n### Summer:\n- **Weather**: Generally hotter and longer days, ideal for beach activities, hiking, and outdoor sports.\n- **Nature**: Blooms with flowers, greenery, and fruit ripening; many animals are active.\n- **Events**: Festivals, concerts, and seasonal events like Independence Day.\n- **Challenges**: Hotter temperatures can be uncomfortable indoors; some people find it harder to sleep in the heat.\n\n### Winter:\n- **Weather**: Cooler temperatures, shorter days, and potentially snowy conditions.\n- **Nature**: Fewer bugs, quieter wildlife; plants slow down growth; fewer daylight hours can affect mood.\n- **Events**: Holidays like Christmas, winter festivals, and activities like skiing or snowboarding.\n- **Challenges**: Cold weather can be inconvenient; Infrastructure issues like slippery roads and closed schools.\n\n### Neutral Considerations:\n- **Light and Mood**: Summer's extended daylight can boost energy, while winter's earlier sunset may lead to a more restful environment.\n- **Comfort**: Summer can feel stuffy indoors; winter may require more layers but can feel cozy at home.\n\n### Conclusion:\nBoth seasons have their highs and lows, and the choice between summer and winter is largely a matter of personal preference. If you enjoy outdoor activities, parties, and vibrant social scenes, summer might be your pick. If you prefer a quieter, more introspective time, winter can be more appealing. Ultimately, the better season depends on what you're searching for.",
+            "tool_calls":[
+               
+            ]
+         },
+         "logprobs":"None",
+         "finish_reason":"stop",
+         "stop_reason":"None"
+      }
+   ],
+   "usage":{
+      "prompt_tokens":11,
+      "total_tokens":553,
+      "completion_tokens":542,
+      "prompt_tokens_details":"None"
+   },
+   "prompt_logprobs":"None"
+}
+```
+
+We can also use the OpenAI SDK to perform streaming:
+
+```python
+from openai import OpenAI
+
+url = "https://r1-prod.polandcentral.inference.ml.azure.com/v1"
+client = OpenAI(base_url=url, api_key="xxxxxxxx")
+
+response = client.chat.completions.create(
+    model="deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+    messages=[
+        {"role": "user", "content": "What is better, summer or winter?"},
+    ],
+    max_tokens=500,
+    stream=True,
+)
+ 
+for chunk in response:
+    delta = chunk.choices[0].delta
+    if hasattr(delta, "content"):
+        print(delta.content, end="", flush=True)
 ```
 
 ## Autoscaling our Deepseek R1 deployment
