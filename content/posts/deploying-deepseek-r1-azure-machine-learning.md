@@ -161,74 +161,6 @@ headers = {
 }
 data = {
     "model": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
-		"messages": [
-			{
-				"role": "user",
-				"content": "What is Deepseek r1?"
-			},
-    ]
-}
-
-response = requests.post(url, headers=headers, json=data)
-print(response.json())
-```
-
-Response:
-
-```json
-{
-   "id":"chatcmpl-305d162f-80d2-4e92-bb61-0cc114a5cada",
-   "object":"chat.completion",
-   "created":1738052045,
-   "model":"deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
-   "choices":[
-      {
-         "index":0,
-         "message":{
-            "role":"assistant",
-            "content":"<think>\n\n</think>\n\nDeepSeek-R1 is an AI assistant developed by the Chinese company DeepSeek. It is designed to provide helpful and accurate information on a wide range of topics, and it is constantly updated with new data and strengthened in understanding and response capabilities. If you have any questions or need assistance, DeepSeek-R1 is here to help!",
-            "tool_calls":[
-               
-            ]
-         },
-         "logprobs":"None",
-         "finish_reason":"stop",
-         "stop_reason":"None"
-      }
-   ],
-   "usage":{
-      "prompt_tokens":10,
-      "total_tokens":81,
-      "completion_tokens":71,
-      "prompt_tokens_details":"None"
-   },
-   "prompt_logprobs":"None"
-}
-```
-
-Works!
-
-### Step 4 - Testing the deployment
-
-Again, let's get the endpoints scoring uri and the api keys:
-
-```cli
-az ml online-endpoint show -n r1-prod
-az ml online-endpoint get-credentials -n r1-prod
-```
-
-We can then call the endpoint using this Python code snippet:
-
-```python
-import requests
-
-url = "https://r1-prod.polandcentral.inference.ml.azure.com/v1/completions"
-headers = {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer xxxxxxxxxxxx"
-}
-data = {
-    "model": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
     "messages": [
         {
             "role": "user",
@@ -275,7 +207,7 @@ Answer looks good, we can see the `<think>` tags where the model does its reason
 }
 ```
 
-We can also use the OpenAI SDK to perform streaming:
+Works! Lastly, we can also use the OpenAI SDK to perform streaming:
 
 ```python
 from openai import OpenAI
