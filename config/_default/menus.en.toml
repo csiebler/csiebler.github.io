@@ -39,7 +39,7 @@
   url = "https://clemenssiebler.com/posts/index.xml"
   weight = 41
   [main.params]
-    icon = "rss.svg"
+    icon = "rss"
     showName = false
     target = "_blank"
 
