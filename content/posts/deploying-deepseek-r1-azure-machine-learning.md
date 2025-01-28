@@ -154,7 +154,7 @@ For completion models, we can then call the endpoint using this Python code snip
 ```python
 import requests
 
-url = "https://r1-prod.polandcentral.inference.ml.azure.com/v1/completions"
+url = "https://r1-prod.polandcentral.inference.ml.azure.com/v1/chat/completions"
 headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer xxxxxxxxxxxx"
