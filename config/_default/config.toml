@@ -15,3 +15,7 @@ googleAnalytics = "G-HB3D5YJ128"
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]
+
+
+[params]
+rssURL = "https://clemenssiebler.com/posts/index.xml"
