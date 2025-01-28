@@ -9,6 +9,8 @@ In this post, we'll explain how to deploy [Deepseek R1](https://huggingface.co/d
 
 In detail, we'll be deploying [DeepSeek-R1-Distill-Llama-8B](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B), which is based off `Llama-3.1-8B`.
 
+![Deepseek Logo](/images/deepseek-logo.png)
+
 # Tools used
 
 To deploy `R1`, we'll be using:
