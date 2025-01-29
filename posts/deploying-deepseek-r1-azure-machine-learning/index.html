@@ -39,8 +39,8 @@ az configure --defaults workspace=&lt;Azure Machine Learning workspace name&gt; 
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>instance_type</span><span class=p>:</span><span class=w> </span><span class=l>Standard_NC24ads_A100_v4</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>instance_count</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>request_settings</span><span class=p>:</span><span class=w> </span><span class=c># This section is optional, yet important for optimizing throughput</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>max_concurrent_requests_per_instance</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>request_timeout_ms</span><span class=p>:</span><span class=w> </span><span class=m>10000</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>max_concurrent_requests_per_instance</span><span class=p>:</span><span class=w> </span><span class=m>32</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>request_timeout_ms</span><span class=p>:</span><span class=w> </span><span class=m>60000</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>liveness_probe</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>initial_delay</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>period</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
