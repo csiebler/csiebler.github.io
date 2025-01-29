@@ -113,8 +113,8 @@ environment:
 instance_type: Standard_NC24ads_A100_v4
 instance_count: 1
 request_settings: # This section is optional, yet important for optimizing throughput
-    max_concurrent_requests_per_instance: 1
-    request_timeout_ms: 10000
+    max_concurrent_requests_per_instance: 32
+    request_timeout_ms: 60000
 liveness_probe:
   initial_delay: 10
   period: 10
