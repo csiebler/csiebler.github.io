@@ -97,7 +97,7 @@ name: current
 endpoint_name: r1-prod
 environment_variables:
   MODEL_NAME: deepseek-ai/DeepSeek-R1-Distill-Llama-8B
-  VLLM_ARGS: "--max-num-seqs 16 --enforce-eager" # optional args for vLLM runtime
+  VLLM_ARGS: "" # optional args for vLLM runtime
 environment:
   image: xxxxxx.azurecr.io/azureml/azureml_xxxxxxxx # paste Docker image address here
   inference_config:
@@ -166,8 +166,7 @@ data = {
             "role": "user",
             "content": "What is better, summer or winter?"
         },
-    ],
-    'max_tokens': 750,
+    ]
 }
 
 response = requests.post(url, headers=headers, json=data)
@@ -220,8 +219,7 @@ response = client.chat.completions.create(
     messages=[
         {"role": "user", "content": "What is better, summer or winter?"},
     ],
-    max_tokens=500,
-    stream=True,
+    stream=True
 )
  
 for chunk in response:
