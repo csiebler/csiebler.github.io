@@ -103,7 +103,7 @@ environment:
   inference_config:
     liveness_route:
       port: 8000
-      path: /health
+      path: /ping
     readiness_route:
       port: 8000
       path: /health
@@ -128,6 +128,18 @@ readiness_probe:
   success_threshold: 1
   failure_threshold: 30
 ```
+
+Some notes on the parameter choices that we should consider when deploying this:
+
+* `instance_count` - defines how many nodes of `Standard_NC24ads_A100_v4` we want to spin up.
+* `max_concurrent_requests_per_instance` - defines how many concurrent requests we'll let pass through the endpoint into the queue before returning a `HTTP 429`.
+* `request_timeout_ms` - amount of milliseconds that can pass, until the endpoint closes the connection. In our case here, the client will receive a `HTTP 408` after waiting for 60 seconds.
+
+Changing these parameters will have the following impact:
+
+* Increasing `max_concurrent_requests_per_instance` will increase overall throughput and TPMs (tokens per minute), but will also increase total latency for a given call.
+* Increasing `request_timeout_ms` will allow clients to wait longer for a response, given that `max_concurrent_requests_per_instance` has not been exhausted yet.
+* Increasing `instance_count` will linearly scale throughput and cost.
 
 A full explanation of the parameters can be found in my prior post [Deploying vLLM models on Azure Machine Learning with Managed Online Endpoints
 ](https://clemenssiebler.com/posts/vllm-on-azure-machine-learning-managed-online-endpoints-deployment/).

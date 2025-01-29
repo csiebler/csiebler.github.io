@@ -93,7 +93,7 @@ environment:
   inference_config:
     liveness_route:
       port: 8000
-      path: /health
+      path: /ping
     readiness_route:
       port: 8000
       path: /health
