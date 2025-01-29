@@ -240,6 +240,12 @@ for chunk in response:
         print(delta.content, end="", flush=True)
 ```
 
+## Monitoring our deployment
+
+We can also monitor the resource utilization, most importantly obviously the GPUs via Azure Monitor, as outline [here](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-monitor-online-endpoints?view=azureml-api-2). When putting constant load on the model, we see that vLLM eats up 90% of the GPU memory (default setting) and we see GPU utilization close to 100%:
+
+![Metrics in Azure Monitor](/images/vllm-deepseek-metrics.png "Metrics in Azure Monitor")
+
 ## Autoscaling our Deepseek R1 deployment
 
 Autoscaling Managed Online Endpoint deployments in Azure Machine Learning allows us to dynamically adjust the number of instances allocated to our endpoints based on real-time metrics and schedules. This ensures that our application can handle varying loads efficiently without manual intervention. By integrating with Azure Monitor, you can set up rules to scale out when the CPU or GPU utilization exceeds a certain threshold or scale in during off-peak hours. For detailed guidance on configuring autoscaling, you can refer to the [official documentation](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-autoscale-endpoints?view=azureml-api-2&tabs=cli).
