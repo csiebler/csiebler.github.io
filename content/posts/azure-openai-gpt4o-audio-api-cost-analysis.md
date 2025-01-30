@@ -62,14 +62,7 @@ With all this information, let's figure out the cost of this call.
 
 ## Pricing
 
-We can find the pricing for `GPT-4o-Audio-Preview-Global` on the [Azure OpenAI pricing page](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/#pricing) - All information in this post is as of 01/25/2025 and is likely to change in the future:
-
-| Type   | Input Price (per 1M Tokens) | Output Price (per 1M Tokens) |
-|--------|-----------------------------|------------------------------|
-| Text | $2.50 | $10 |
-| Audio | $100 | $200 |
-
-**Edit:** It looks like the Azure pricing website hasn't been updated to OpenAI's pricing for `2024-12-17`, which Microsoft matches:
+We can find the pricing for `GPT-4o-Audio-Preview-2024-12-17-Global` on the [Azure OpenAI pricing page](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/#pricing) - All information in this post is as of 01/30/2025 and is likely to change in the future:
 
 | Type   | Input Price (per 1M Tokens) | Output Price (per 1M Tokens) |
 |--------|-----------------------------|------------------------------|
@@ -119,32 +112,36 @@ So this means for **synthesizing audio, we're looking at roughly $6 per hour**. 
 
 The question we want to answer is: even though we pay for audio tokens, does this imply the same audio costs per hour across languages?
 
-So for sake of testing, we'll use English, German, French, Spanish. For this, I've created 10 random news articles with `gpt4o-mini` and used the first 200 tokens of each article for audio input synthesis, then calculated the average cost. The results are as follows:
+So for sake of testing, we'll use Arabic, Chinese, English, French, German, Korean, and Spanish. For this, I've created 10 random news articles with `gpt4o-mini` and used each article for audio input synthesis, then calculated the average cost. The results are as follows:
 
-* **English:** $5.82 per hour of audio
-* **French:** $5.83 per hour of audio
-* **German:** $5.82 per hour of audio
-* **Spanish:** $5.82 per hour of audio
-
-(I'm not including the variance, as it has been very low)
+* **Arabic**: $5.94 per hour of audio
+* **Chinese**: $5.93 per hour of audio
+* **English**: $5.91 per hour of audio
+* **French**: $5.94 per hour of audio
+* **German**: $5.92 per hour of audio
+* **Korean**: $5.96 per hour of audio
+* **Spanish**: $5.92 per hour of audio
 
 Looking at this data, we can derive our first insight:
 
-**Learning #1:** 1h of generated audio costs around $5.82. This is more or less independent of the language.
+**Learning #1:** Synthesizing one hour audio costs around $5.93. This is more or less independent of the language.
 
 Now let's break it down by cost per 1000 words:
 
-* **English:** $0.81 per 1000 words synthesized
-* **French:** $0.73 per 1000 words synthesized
-* **German:** $0.91 per 1000 words synthesized
-* **Spanish:** $0.80 per 1000 words synthesized
+* **Arabic**: $0.90 per 1000 words synthesized
+* **Chinese**: $0.55 per 1000 words synthesized (take this with a grain of salt, as word counting goes map easily)
+* **English**: $0.82 per 1000 words synthesized
+* **French**: $0.72 per 1000 words synthesized
+* **German**: $0.94 per 1000 words synthesized
+* **Korean**: $1.06 per 1000 words synthesized
+* **Spanish**: $0.76 per 1000 words synthesized
 
-Just as gpt4o requires different token amounts to process different languages (in some cases 1.5x or even more), gpt4o-audio also results in different costs per word when generating audio. This was expected, as for example German has fairly long words compared to English, thus generating more seconds, which should equate more audio tokens. However, it is surprising to see that the differences are less than ~10% on average, with an average of roughly $0.82 per 1000 words.
+Just as gpt4o requires different token amounts to process different languages (in some cases 1.5x or even more), gpt4o-audio also results in different costs per word when generating audio. This was expected, as for example German has fairly long words compared to English.
 
-**Learning #2:** Cost per word varies depending on the language, but it is not as drastic as expected.
+**Learning #2:** As expected, cost per word varies depending on the language and averages at $0.87 per 1000 words.
 
-Now to be fair, this test was at fairly small scale and did not include non-Western languages. Further evaluation is needed with more diverse and longer datasets.
+Now to be fair, this test was at fairly small scale and did not contain a large variety of text input data. Further evaluation is needed with more diverse and longer datasets.
 
 ## Summary
 
-In this post, we've explored the cost implications of using the GPT-4o-Audio-Preview API, highlighting how it processes both text and audio tokens. By analyzing a small example and scaling across different languages, we found that **generating one hour of audio costs approximately $5.82**, regardless of the language. In summary, the cost per 1,000 words synthesized can vary depending on the language, due to differences in token requirements and word lengths. However, **on average the cost per 1000 words sits at  around $0.82**. This insight provides a clear understanding of the API's pricing, making it easier for developers and business to plan its integration into their projects.
+In this post, we've explored the cost implications of using the GPT-4o-Audio-Preview API, highlighting how it processes both text and audio tokens. By analyzing a small example and scaling across different languages, we found that **generating one hour of audio costs approximately $5.93**, regardless of the language. In summary, the cost per 1,000 words synthesized can vary depending on the language, due to differences in token requirements and word lengths. However, **on average the cost per 1000 words sits at around $0.87**. This insight provides a clear understanding of the API's pricing, making it easier for developers and business to plan its integration into their projects.
