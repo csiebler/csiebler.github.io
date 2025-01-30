@@ -135,7 +135,7 @@ Looking at this data, we can derive our first insight:
 
 Now let's break it down by cost per 1000 words:
 
-| Language  | Price per 1000 words synthesized |
+| Language  | Cost per 1000 words synthesized |
 |-----|:----------:|
 | Arabic    | $0.90 |
 | Chinese   | $0.55* |
@@ -157,7 +157,7 @@ Now to be fair, this test was at fairly small scale and did not contain a large 
 
 So let's it the other way around: Take our synthesized news articles (audio) and feed them into GPT-4o-Audio-Preview API for transcription to text. Again, with a bit of  math we get to:
 
-| Language  | Price per hour of Audio |
+| Language  | Cost per hour of Audio |
 |-----|:----------:|
 | Arabic    | $1.55|
 | Chinese   | $1.54|
