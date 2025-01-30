@@ -35,10 +35,10 @@ completion=client.chat.completions.create(
     modalities=["text", "audio"],
     audio={"voice": "alloy", "format": "wav"},
     messages=[
-        {
-            "role": "user",
-            "content": "Read out this message in English: We are thrilled to announce the release of audio support accessible via Chat Completions API featuring the new GPT-4o-Audio preview Model, now available in preview. Building on to our recent launch of GPT-4o-Realtime-Preview, this groundbreaking addition to the GPT-4o family introduces support for audio prompts and the ability to generate spoken audio responses."
-        }
+ {
+     "role": "user",
+     "content": "Read out this message in English: We are thrilled to announce the release of audio support accessible via Chat Completions API featuring the new GPT-4o-Audio preview Model, now available in preview. Building on to our recent launch of GPT-4o-Realtime-Preview, this groundbreaking addition to the GPT-4o family introduces support for audio prompts and the ability to generate spoken audio responses."
+ }
     ]
 )
 
@@ -120,14 +120,14 @@ The question we want to answer is: even though we pay for audio tokens, does thi
 So for sake of testing, we'll use Arabic, Chinese, English, French, German, Korean, and Spanish. For this, I've created 10 random news articles with `gpt4o-mini` and used each article for audio input synthesis, then calculated the average cost. The results are as follows:
 
 | Language  | Cost per hour of Audio |
-|-----------|------------------------|
-| Arabic    | $5.94                  |
-| Chinese   | $5.93                  |
-| English   | $5.91                  |
-| French    | $5.94                  |
-| German    | $5.92                  |
-| Korean    | $5.96                  |
-| Spanish   | $5.92                  |
+|-----|:----------:|
+| Arabic    | $5.94|
+| Chinese   | $5.93|
+| English   | $5.91|
+| French    | $5.94|
+| German    | $5.92|
+| Korean    | $5.96|
+| Spanish   | $5.92|
 
 Looking at this data, we can derive our first insight:
 
@@ -136,14 +136,14 @@ Looking at this data, we can derive our first insight:
 Now let's break it down by cost per 1000 words:
 
 | Language  | Price per 1000 words synthesized |
-|-----------|---------------------------------|
-| Arabic    | $0.90                           |
-| Chinese   | $0.55*   |
-| English   | $0.82                           |
-| French    | $0.72                           |
-| German    | $0.94                           |
-| Korean    | $1.06                           |
-| Spanish   | $0.76                           |
+|-----|:----------:|
+| Arabic    | $0.90 |
+| Chinese   | $0.55* |
+| English   | $0.82 |
+| French    | $0.72 |
+| German    | $0.94 |
+| Korean    | $1.06 |
+| Spanish   | $0.76 |
 
 \* take this with a grain of salt, as word counting goes map easily
 
@@ -158,14 +158,14 @@ Now to be fair, this test was at fairly small scale and did not contain a large 
 So let's it the other way around: Take our synthesized news articles (audio) and feed them into GPT-4o-Audio-Preview API for transcription to text. Again, with a bit of  math we get to:
 
 | Language  | Price per hour of Audio |
-|-----------|------------------------|
-| Arabic    | $1.55                  |
-| Chinese   | $1.54                  |
-| English   | $1.49                  |
-| French    | $1.56                  |
-| German    | $1.54                  |
-| Korean    | $1.55                  |
-| Spanish   | $1.54                  |
+|-----|:----------:|
+| Arabic    | $1.55|
+| Chinese   | $1.54|
+| English   | $1.49|
+| French    | $1.56|
+| German    | $1.54|
+| Korean    | $1.55|
+| Spanish   | $1.54|
 
 **Learning #3:** Transcribing audio costs around $1.55 per hour of audio.
 
