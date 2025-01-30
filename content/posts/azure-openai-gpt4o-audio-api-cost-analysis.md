@@ -82,7 +82,9 @@ So for our example above, we consumed:
 
 **Total:** $0.04841
 
-Let's do this programmatically and also include the length of the audio:
+## Cost analysis: Audio Generation
+
+So let's looking into how audio generation scales across different length of text and different languages. For this, let's first calculate the cost programmatically:
 
 ```python
 # get the length of the audio file
@@ -92,14 +94,17 @@ with wave.open("test.wav", "rb") as f:
     
 cost_text_input = completion.usage.prompt_tokens_details.text_tokens * 2.5/1_000_000
 cost_text_output = completion.usage.completion_tokens_details.text_tokens * 10/1_000_000
+cost_audio_input = completion.usage.prompt_tokens_details.audio_tokens * 40/1_000_000
 cost_audio_output = completion.usage.completion_tokens_details.audio_tokens * 80/1_000_000
 
-cost_total = cost_text_input + cost_text_output + cost_audio_output
+cost_total = cost_text_input + cost_text_output + cost_audio_input + cost_audio_output
 cost_per_hour = cost_total / audio_length_in_seconds * 3600
 
 print(f"Cost for generating {audio_length_in_seconds} seconds audio file was ${cost_total}")
 print(f"This equates to ${cost_per_hour} per hour of audio")
 ```
+
+Let's check the output:
 
 ```
 Cost for generating 29.45 seconds audio file was $0.04841
@@ -108,7 +113,7 @@ This equates to $5.9176910017 per hour of audio
 
 So this means for **synthesizing audio, we're looking at roughly $6 per hour**. But okay, this was just a small example, so let's run some experiments, scale it and evaluate across a few more languages.
 
-## Cost per hour across different languages
+### Synthesis cost per hour across different languages
 
 The question we want to answer is: even though we pay for audio tokens, does this imply the same audio costs per hour across languages?
 
@@ -142,6 +147,20 @@ Just as gpt4o requires different token amounts to process different languages (i
 
 Now to be fair, this test was at fairly small scale and did not contain a large variety of text input data. Further evaluation is needed with more diverse and longer datasets.
 
+## Cost analysis: Audio Input (Transcription)
+
+So let's it the other way around: Take our synthesized news articles (audio) and feed them into GPT-4o-Audio-Preview API for transcription to text. Again, with a bit of  math we get to:
+
+* **Arabic**: $1.55 per hour of audio
+* **Chinese**: $1.54 per hour of audio
+* **English**: $1.49 per hour of audio
+* **French**: $1.56 per hour of audio
+* **German**: $1.54 per hour of audio
+* **Korean**: $1.55 per hour of audio
+* **Spanish**: $1.54 per hour of audio
+
+**Learning #3:** Transcribing audio costs around $1.55 per hour of audio.
+
 ## Summary
 
-In this post, we've explored the cost implications of using the GPT-4o-Audio-Preview API, highlighting how it processes both text and audio tokens. By analyzing a small example and scaling across different languages, we found that **generating one hour of audio costs approximately $5.93**, regardless of the language. In summary, the cost per 1,000 words synthesized can vary depending on the language, due to differences in token requirements and word lengths. However, **on average the cost per 1000 words sits at around $0.87**. This insight provides a clear understanding of the API's pricing, making it easier for developers and business to plan its integration into their projects.
+In this post, we've explored the cost implications of using the GPT-4o-Audio-Preview API, highlighting how it processes both text and audio tokens. By analyzing a small example and scaling across different languages, we found that **generating one hour of audio costs approximately $5.93**, regardless of the language. In summary, the cost per 1,000 words synthesized can vary depending on the language, due to differences in token requirements and word lengths. However, **on average the cost per 1000 words sits at around $0.87**. For **transcribing audio to text, the cost is approximately $1.55 per hour of audio**, again, independent of the language. This insight provides a clear understanding of the API's pricing, making it easier for developers and business to plan its integration into their projects.
