@@ -86,7 +86,7 @@ name: current
 endpoint_name: vllm-hf
 environment_variables:
   MODEL_NAME: meta-llama/Llama-3.2-11B-Vision # define the model name using the identifier from HG
-  VLLM_ARGS: "--max-num-seqs 16 --enforce-eager" # optional args for vLLM runtime
+  VLLM_ARGS: "" # optional args for vLLM runtime
   HUGGING_FACE_HUB_TOKEN: <Your HF token> # use this, if you want to authenticate to HF
 environment:
   image: xxxxxx.azurecr.io/azureml/azureml_xxxxxxxx # paste Docker image address here
@@ -103,7 +103,7 @@ environment:
 instance_type: Standard_NC24ads_A100_v4
 instance_count: 1
 request_settings: # This section is optional, yet important for optimizing throughput
-    max_concurrent_requests_per_instance: 1
+    max_concurrent_requests_per_instance: 2
     request_timeout_ms: 10000
 liveness_probe:
   initial_delay: 10
@@ -119,9 +119,9 @@ readiness_probe:
   failure_threshold: 30
 ```
 
-Since vLLM does not support separate probes for readiness and liveness, we'll need to make sure that the model has fully loaded before the fire the first probe. This is why we increased `readiness_probe.initial_delay` to 120s. For larger models, we should also follow [vLLM's documentation](https://docs.vllm.ai/en/v0.6.1/serving/distributed_serving.html) for using tensor parallel inference (model on single node but spanning multiple GPUs) by adding `--tensor-parallel-size <NUM_OF_GPUs>` to `VLLM_ARGS`. Since we're using a single A100 GPU in our example (`Standard_NC24ads_A100_v4`), this is not required though.
+Important to point out here is that the `request_settings` depend a bit on our instance type and number of GPUs and might require some manual tuning to fully optimize throughput. The goal is to find a good tradeoff between concurrency (`max_concurrent_requests_per_instance`) and queue time in order to avoid either hitting `request_timeout_ms` from the endpoint side, or any HTTP-timeouts on the client side. Both these scenarios result in `HTTP 429`, and the client would need to implement exponential backoff (e.g. via `tenacity` library).
 
-The `request_settings` depend a bit on our instance type/size and might require some manual tuning to get the model run properly and efficiently. Goal is to find a good tradeoff between concurrency (`max_concurrent_requests_per_instance`) and queue time in order to avoid either hitting `request_timeout_ms` from the endpoint side, or any HTTP-timeouts on the client side. Both these scenarios result in `HTTP 429`, and the client would need to implement exponential backoff (e.g. via `tenacity` library).
+In practice, setting `max_concurrent_requests_per_instance` to `8` works well for 7bn or 8bn models on a `A100` GPU (BF16). Same goes for 70bn models (BF16), where 4x `A100` (on a `Standard_NC96ads_A100_v4` instance) can handle `max_concurrent_requests_per_instance: 8` well, before throughput saturates latency starts to spike.
 
 Lastly, we can deploy the model:
 
@@ -297,7 +297,7 @@ environment:
 instance_type: Standard_NC24ads_A100_v4
 instance_count: 1
 request_settings:
-    max_concurrent_requests_per_instance: 1
+    max_concurrent_requests_per_instance: 2
     request_timeout_ms: 10000
 liveness_probe:
   initial_delay: 10
