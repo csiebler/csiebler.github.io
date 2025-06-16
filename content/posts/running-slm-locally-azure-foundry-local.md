@@ -80,14 +80,6 @@ The model will stop running and free up your system resources.
 
 One of the most powerful features of Foundry Local is its OpenAI-compatible API. When we run a model, it starts a local server that we can interact with programmatically.
 
-First, in a separate terminal, start the model in service mode:
-
-```bash
-foundry model run qwen2.5-1.5b-instruct-generic-gpu
-```
-
-Then, in your Python application, we can use the OpenAI library to interact with the local model.
-
 First, let's install the required Foundry dependency:
 
 ```bash
@@ -116,6 +108,8 @@ response = client.chat.completions.create(
 
 print(response.choices[0].message.content)
 ```
+
+In this case, `FoundryLocalManager` checks if the model is already running and if not, starts the most appropriate version in the background (e.g., CPU or GPU) and then wires the endpoint for us. We can also always use `foundry service ps` to check which models are currently up and running.
 
 If everything worked, we should see the following output:
 
