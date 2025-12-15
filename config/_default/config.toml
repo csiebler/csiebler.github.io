@@ -13,7 +13,9 @@ summaryLength = 0
 [pagination]
   pagerSize = 10
 
-googleAnalytics = "G-HB3D5YJ128"
-
 [outputs]
   home = ["HTML", "RSS", "JSON"]
+
+[services]
+  [services.googleAnalytics]
+    ID = "G-HB3D5YJ128"
