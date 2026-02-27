@@ -13,6 +13,10 @@ Speaking in front of small and large audiences has been my passion for many year
 
 ## Past events
 
+### Microsoft AI Tour - Johannesburg, South Africa (January 2026)
+
+* Pioneering the future of financial services with AI - Breakout session
+
 ### Microsoft Envision AI Connection DACH - Munich, Germany (March 2024)
 
 * Innovativ sein mit Generative AI: Ein Praxisleitfaden zur Umsetzung - mit Deutsche Telekom
